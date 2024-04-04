@@ -83,4 +83,30 @@ public class DashboardActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.options_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.refresh) {
+            // Do something
+
+        } else if (id == R.id.clear_event) {
+            // Do something
+        }
+        else if (id == R.id.delete_categories) {
+            // Do something
+        }
+        else if (id == R.id.delete_events) {
+            // Do something
+        }
+        // tell the OS
+        return true;
+    }
+
 }
