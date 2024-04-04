@@ -34,33 +34,24 @@ public class SignUpActivity extends AppCompatActivity {
         String confirmPassword = confirmPasswordText.getText().toString();
 
         SharedPreferences sharedPreferences = getSharedPreferences(Keys.ACC_SP, MODE_PRIVATE);
-        SharedPreferences latestSavedUserSP = getSharedPreferences(Keys.LATEST_SAVED_USER, MODE_PRIVATE);
         // we don't want the same username in the sharedPreferences
-        if (sharedPreferences.contains(username)) {
-            Toast.makeText(this, "The username has been used, please change another one", Toast.LENGTH_LONG).show();
-        } else {
-            // check if the password has a value
-            if(password.length() < 1) {
-                Toast.makeText(this, "Password can not be empty, please try again", Toast.LENGTH_LONG).show();
-                return;
-            }
-            if(!confirmPassword.equals(password)){
-                Toast.makeText(this, "The passwords you entered do not match.", Toast.LENGTH_LONG).show();
-                return;
-            }
-            // Key does not exist, safe to insert the account info into the shared preferences
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString(username, password);
-            editor.apply();
-
-            //Update the latest saved acc
-            SharedPreferences.Editor editorLatest = latestSavedUserSP.edit();
-            editorLatest.putString("username", username);
-            editorLatest.apply();
-
-            Toast.makeText(this, "Your account has been created successfully", Toast.LENGTH_LONG).show();
-            onLoginNavClick(view);
+        // check if the password has a value
+        if(password.length() < 1 || username.length() < 1) {
+            Toast.makeText(this, "Password or Username can not be empty, please try again", Toast.LENGTH_LONG).show();
+            return;
         }
+        if(!confirmPassword.equals(password)){
+            Toast.makeText(this, "The passwords you entered do not match.", Toast.LENGTH_LONG).show();
+            return;
+        }
+        // Key does not exist, safe to insert the account info into the shared preferences
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(Keys.USERNAME, username);
+        editor.putString(Keys.PASSWORD, password);
+        editor.apply();
+
+        Toast.makeText(this, "Your account has been created successfully", Toast.LENGTH_LONG).show();
+        onLoginNavClick(view);
     }
 
     public void onLoginNavClick(View view) {

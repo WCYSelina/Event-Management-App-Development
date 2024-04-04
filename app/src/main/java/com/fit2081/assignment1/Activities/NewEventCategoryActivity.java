@@ -40,10 +40,18 @@ public class NewEventCategoryActivity extends AppCompatActivity {
         ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.SEND_SMS, android.Manifest.permission.RECEIVE_SMS, Manifest.permission.READ_SMS}, 0);
         MyBroadCastReceiver myBroadCastReceiver = new MyBroadCastReceiver();
         /*
+            Or register your SMSReciver class in the activity as shown below:
          * Register the broadcast handler with the intent filter that is declared in
          * class SMSReceiver @line 11
          * */
-        registerReceiver(myBroadCastReceiver, new IntentFilter(SMSReceiver.SMS_FILTER));
+        /*
+        new IntentFilter(SMSReceiver.SMS_FILTER):
+        telling the system that your myBroadCastReceiver is interested in intents that match the action defined by
+        SMSReceiver.SMS_FILTER.
+
+        RECEIVER_EXPORTED meaning it is willing to receive intents from components outside its application
+        */
+        registerReceiver(myBroadCastReceiver, new IntentFilter(SMSReceiver.SMS_FILTER),RECEIVER_EXPORTED);
 
     }
 
@@ -53,10 +61,15 @@ public class NewEventCategoryActivity extends AppCompatActivity {
 
         try {
             eventCount = Integer.parseInt(eventCountText.getText().toString());
+            if (eventCount == 0) {
+                throw new Exception();
+            }
+        } catch (NumberFormatException e) {
+            eventCount = 1; // Since we can only have positive integer only, so the default value is 1
         } catch (Exception e) {
-            eventCount = 0;
+            toastFillingError();
+            return;
         }
-
         boolean isActive = isActiveSwitch.isChecked();
         String isActiveStr = Boolean.toString(isActive);
 
@@ -89,6 +102,7 @@ public class NewEventCategoryActivity extends AppCompatActivity {
          * */
         @Override
         public void onReceive(Context context, Intent intent) {
+            //context is used to interact with the Android system to send broadcasts, start activities, services, etc., within the current environment or application state.
             /*
              * Retrieve the message from the intent
              * */

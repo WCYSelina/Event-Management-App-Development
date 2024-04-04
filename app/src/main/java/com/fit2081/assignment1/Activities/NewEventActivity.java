@@ -46,7 +46,7 @@ public class NewEventActivity extends AppCompatActivity {
          * Register the baroadcast handler with the intent filter that is declared in
          * class SMSReceiver @line 11
          * */
-        registerReceiver(myBroadCastReceiver, new IntentFilter(SMSReceiver.SMS_FILTER));
+        registerReceiver(myBroadCastReceiver, new IntentFilter(SMSReceiver.SMS_FILTER),RECEIVER_EXPORTED);
 
     }
 
@@ -78,8 +78,14 @@ public class NewEventActivity extends AppCompatActivity {
         int ticketsAvailable;
         try {
             ticketsAvailable = Integer.parseInt(ticketAvailableText.getText().toString());
+            if (ticketsAvailable == 0) {
+                throw new Exception();
+            }
+        } catch (NumberFormatException e) {
+            ticketsAvailable = 1; // Since we can only have positive integer only, so the default value is 1
         } catch (Exception e) {
-            ticketsAvailable = 0;
+            toastFillingError();
+            return;
         }
 
         SharedPreferences sharedPreferences = getSharedPreferences(Keys.EVENT_SP, MODE_PRIVATE);
@@ -93,7 +99,7 @@ public class NewEventActivity extends AppCompatActivity {
             editor.putString(Keys.EVENT_IS_ACTIVE, isActiveStr);
 
             editor.apply();
-            Toast.makeText(this, "Category saved successfully: " + eventID, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Category saved successfully: " + eventID + " to " + categoryIdRef, Toast.LENGTH_LONG).show();
         } else {
             toastFillingError();
         }

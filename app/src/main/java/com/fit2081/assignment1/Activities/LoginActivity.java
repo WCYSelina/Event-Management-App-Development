@@ -26,8 +26,8 @@ public class LoginActivity extends AppCompatActivity {
         passwordText = findViewById(R.id.passwordText2);
 
         //get the latest saved account and display
-        SharedPreferences latestSavedAccSP = getSharedPreferences(Keys.LATEST_SAVED_USER, MODE_PRIVATE);
-        String username = latestSavedAccSP.getString("username", "");
+        SharedPreferences latestSavedAccSP = getSharedPreferences(Keys.ACC_SP, MODE_PRIVATE);
+        String username = latestSavedAccSP.getString(Keys.USERNAME, "");
         usernameText.setText(username);
     }
 
@@ -37,9 +37,10 @@ public class LoginActivity extends AppCompatActivity {
         String password = passwordText.getText().toString();
 
         SharedPreferences sharedPreferences = getSharedPreferences(Keys.ACC_SP, MODE_PRIVATE);
-        String passRet = sharedPreferences.getString(username, null);
+        String passRet = sharedPreferences.getString(Keys.PASSWORD, null);
+        String userRet = sharedPreferences.getString(Keys.USERNAME, null);
         // we want to check if the password entered is the same with the password in the account information
-        if(passRet != null && passRet.equals(password)) {
+        if(passRet != null && passRet.equals(password) && userRet != null && userRet.equals(username)) {
             onDashboardNavigate(view);
         } else {
             Toast.makeText(this, "Authentication failure: Username or Password incorrect", Toast.LENGTH_LONG).show();

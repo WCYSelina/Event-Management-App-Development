@@ -1,6 +1,8 @@
 package com.fit2081.assignment1;
 
 public class Keys {
+    public static final String USERNAME = "username";
+    public static final String PASSWORD = "password";
     public static final String ACC_SP = "acc_info";
     public static final String LATEST_SAVED_USER = "latest_saved";
 
