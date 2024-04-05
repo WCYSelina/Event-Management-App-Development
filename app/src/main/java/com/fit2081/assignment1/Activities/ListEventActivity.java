@@ -4,11 +4,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-import com.fit2081.assignment1.Fragments.FragmentListCategory;
 import com.fit2081.assignment1.Fragments.FragmentListEvent;
 import com.fit2081.assignment1.R;
 
-public class ViewEventsActivity extends AppCompatActivity {
+public class ListEventActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

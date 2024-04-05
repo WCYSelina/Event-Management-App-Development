@@ -104,7 +104,7 @@ public class DashboardActivity extends AppCompatActivity {
             if (id == R.id.view_categories) {
                 // Do something
                 // Show FragmentListCategory when navigation item for categories is selected
-                Intent intent = new Intent(DashboardActivity.this, ViewCategoriesActivity.class);
+                Intent intent = new Intent(DashboardActivity.this, ListCategoryActivity.class);
                 startActivity(intent);
             } else if (id == R.id.add_category) {
                 // Do something
@@ -113,7 +113,7 @@ public class DashboardActivity extends AppCompatActivity {
             }
             else if (id == R.id.view_events) {
                 // Do something
-                Intent intent = new Intent(DashboardActivity.this, ViewEventsActivity.class);
+                Intent intent = new Intent(DashboardActivity.this, ListEventActivity.class);
                 startActivity(intent);
             }
             else if (id == R.id.log_out) {
@@ -148,6 +148,7 @@ public class DashboardActivity extends AppCompatActivity {
 
         if (id == R.id.refresh) {
             // Do something
+
 
         } else if (id == R.id.clear_event) {
             // Do something

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activities.ViewEventsActivity">
+    tools:context=".Activities.ListEventActivity">
 
     <!-- This FrameLayout acts as a placeholder for fragments in the dashboard_layout.xml -->
     <FrameLayout
