@@ -35,7 +35,7 @@ public class FragmentListCategory extends Fragment {
 
     private RecyclerView recyclerView;
     private CategoryAdapter adapter;
-    private ArrayList<EventCategory> categories;
+    private List<EventCategory> categories;
 
     public FragmentListCategory() {
         // Required empty public constructor
@@ -85,13 +85,22 @@ public class FragmentListCategory extends Fragment {
         adapter = new CategoryAdapter(categories);
         recyclerView.setAdapter(adapter);
 
+        // If your data changes later, call notifyDataSetChanged()
+        // For example, if you have a method that updates the categories, call it here
+        updateCategoriesList(); // This method internally calls notifyDataSetChanged()
         return view;
     }
 
     private ArrayList<EventCategory> readCategoriesFromSharedPreferences() {
         ArrayList<EventCategory> categories = new ArrayList<>();
         // Logic to read categories from SharedPreferences
-        // Example: categories.add(new Category("id1", "Category 1"));
+        categories.add(new EventCategory("id1", "Category 1", 2, false));
         return categories;
+    }
+
+    private void updateCategoriesList() {
+        categories.clear();
+        categories.addAll(readCategoriesFromSharedPreferences()); // or however you update your data
+        adapter.notifyDataSetChanged(); // Notify the adapter to refresh the RecyclerView
     }
 }

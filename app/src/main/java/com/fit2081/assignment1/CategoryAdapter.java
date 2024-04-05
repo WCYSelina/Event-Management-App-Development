@@ -14,13 +14,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHolder> {
-    ArrayList<EventCategory> categories;
+    List<EventCategory> categories;
 
-    public CategoryAdapter(ArrayList<EventCategory> categories) {
+    public CategoryAdapter(List<EventCategory> categories) {
         this.categories = categories;
     }
 
-    public void setData(ArrayList<EventCategory> data) {
+    public void setData(List<EventCategory> data) {
         this.categories = data;
     }
 
@@ -38,7 +38,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         EventCategory category = categories.get(position);
         holder.categoryId.setText(category.getCategoryID());
         holder.categoryName.setText(category.getCategoryName());
-        holder.eventCount.setText(category.getEventCount());
+        holder.eventCount.setText(String.valueOf(category.getEventCount()));
         holder.isActive.setText(String.valueOf(category.isActive()));
 //        Log.d("week6App","onBindViewHolder");
 

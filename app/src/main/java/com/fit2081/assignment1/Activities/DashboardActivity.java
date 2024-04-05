@@ -12,6 +12,7 @@ import android.view.View;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.widget.Toolbar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.fragment.app.Fragment;
 
 import com.fit2081.assignment1.Fragments.FragmentListCategory;
 import com.fit2081.assignment1.R;
@@ -38,6 +39,16 @@ public class DashboardActivity extends AppCompatActivity {
         NavigationView navigationView = findViewById(R.id.nav_view); // The ID of your NavigationView component
         navigationView.setNavigationItemSelectedListener(new MyNavigationListener());
 
+        // Create an instance of FragmentListCategory
+        FragmentListCategory firstFragment = new FragmentListCategory();
+
+        // In case this activity was started with special instructions from an Intent,
+        // pass the Intent's extras to the fragment as arguments
+        firstFragment.setArguments(getIntent().getExtras());
+
+        // Add the fragment to the 'fragment_container' FrameLayout
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.fragment_list_category, firstFragment).commit();
     }
 
     public void onCategoryClick(View view) {
