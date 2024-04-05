@@ -76,7 +76,7 @@ public class FragmentListCategory extends Fragment {
 //        return inflater.inflate(R.layout.fragment_list_category, container, false);
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_list_category, container, false);
-        recyclerView = view.findViewById(R.id.recyclerViewCategories);
+        recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         // Initialize categories list
@@ -101,6 +101,17 @@ public class FragmentListCategory extends Fragment {
     private void updateCategoriesList() {
         categories.clear();
         categories.addAll(readCategoriesFromSharedPreferences()); // or however you update your data
+        categories.addAll(readCategoriesFromSharedPreferences()); // or however you update your data
+        categories.addAll(readCategoriesFromSharedPreferences()); // or however you update your data
+        categories.addAll(readCategoriesFromSharedPreferences()); // or however you update your data
+        categories.addAll(readCategoriesFromSharedPreferences()); // or however you update your data
+        categories.addAll(readCategoriesFromSharedPreferences()); // or however you update your data
+        categories.addAll(readCategoriesFromSharedPreferences()); // or however you update your data
+        categories.addAll(readCategoriesFromSharedPreferences()); // or however you update your data
+        categories.addAll(readCategoriesFromSharedPreferences()); // or however you update your data
+        categories.addAll(readCategoriesFromSharedPreferences()); // or however you update your data
+        categories.addAll(readCategoriesFromSharedPreferences()); // or however you update your data
+
         adapter.notifyDataSetChanged(); // Notify the adapter to refresh the RecyclerView
     }
 }

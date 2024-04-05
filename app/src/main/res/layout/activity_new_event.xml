@@ -6,134 +6,134 @@
     android:layout_height="match_parent"
     tools:context=".Activities.NewEventActivity">
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_begin="16dp" />
+<!--    <androidx.constraintlayout.widget.Guideline-->
+<!--        android:id="@+id/guideline"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:orientation="vertical"-->
+<!--        app:layout_constraintGuide_begin="16dp" />-->
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_begin="40dp" />
+<!--    <androidx.constraintlayout.widget.Guideline-->
+<!--        android:id="@+id/guideline3"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:orientation="horizontal"-->
+<!--        app:layout_constraintGuide_begin="40dp" />-->
 
-    <TextView
-        android:id="@+id/textView13"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="New Event Form"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline3" />
+<!--    <TextView-->
+<!--        android:id="@+id/textView13"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="New Event Form"-->
+<!--        android:textAppearance="@style/TextAppearance.AppCompat.Large"-->
+<!--        android:textStyle="bold"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="@+id/guideline3" />-->
 
-    <TextView
-        android:id="@+id/textView14"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
-        android:text="Event ID"
-        app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toTopOf="@+id/guideline3" />
+<!--    <TextView-->
+<!--        android:id="@+id/textView14"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="30dp"-->
+<!--        android:text="Event ID"-->
+<!--        app:layout_constraintStart_toStartOf="@+id/guideline"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/textView13" />-->
 
-    <EditText
-        android:id="@+id/eventID"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Auto-generated on save"
-        android:inputType="text"
-        android:onClick="onSaveCategoryClick"
-        app:layout_constraintEnd_toStartOf="@+id/guideline4"
-        app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toBottomOf="@+id/textView14" />
+<!--    <EditText-->
+<!--        android:id="@+id/eventID"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:ems="10"-->
+<!--        android:hint="Auto-generated on save"-->
+<!--        android:inputType="text"-->
+<!--        android:onClick="onSaveCategoryClick"-->
+<!--        app:layout_constraintEnd_toStartOf="@+id/guideline4"-->
+<!--        app:layout_constraintStart_toStartOf="@+id/guideline"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/textView14" />-->
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintGuide_begin="395dp" />
+<!--    <androidx.constraintlayout.widget.Guideline-->
+<!--        android:id="@+id/guideline4"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginEnd="16dp"-->
+<!--        android:orientation="vertical"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintGuide_begin="395dp" />-->
 
-    <TextView
-        android:id="@+id/textView15"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
-        android:text="Event Name"
-        app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toBottomOf="@+id/eventID" />
+<!--    <TextView-->
+<!--        android:id="@+id/textView15"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="25dp"-->
+<!--        android:text="Event Name"-->
+<!--        app:layout_constraintStart_toStartOf="@+id/guideline"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/eventID" />-->
 
-    <EditText
-        android:id="@+id/eventName"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Enter Event Name"
-        android:inputType="text"
-        app:layout_constraintEnd_toStartOf="@+id/guideline4"
-        app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toBottomOf="@+id/textView15" />
+<!--    <EditText-->
+<!--        android:id="@+id/eventName"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:ems="10"-->
+<!--        android:hint="Enter Event Name"-->
+<!--        android:inputType="text"-->
+<!--        app:layout_constraintEnd_toStartOf="@+id/guideline4"-->
+<!--        app:layout_constraintStart_toStartOf="@+id/guideline"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/textView15" />-->
 
-    <TextView
-        android:id="@+id/textView16"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
-        android:text="Category Id"
-        app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toBottomOf="@+id/eventName" />
+<!--    <TextView-->
+<!--        android:id="@+id/textView16"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="25dp"-->
+<!--        android:text="Category Id"-->
+<!--        app:layout_constraintStart_toStartOf="@+id/guideline"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/eventName" />-->
 
-    <EditText
-        android:id="@+id/categoryIdRef"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Enter Category Id"
-        android:inputType="text"
-        app:layout_constraintEnd_toStartOf="@+id/guideline4"
-        app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toBottomOf="@+id/textView16" />
+<!--    <EditText-->
+<!--        android:id="@+id/categoryIdRef"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:ems="10"-->
+<!--        android:hint="Enter Category Id"-->
+<!--        android:inputType="text"-->
+<!--        app:layout_constraintEnd_toStartOf="@+id/guideline4"-->
+<!--        app:layout_constraintStart_toStartOf="@+id/guideline"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/textView16" />-->
 
-    <TextView
-        android:id="@+id/textView17"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
-        android:text="Tickets Available"
-        app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toBottomOf="@+id/categoryIdRef" />
+<!--    <TextView-->
+<!--        android:id="@+id/textView17"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="25dp"-->
+<!--        android:text="Tickets Available"-->
+<!--        app:layout_constraintStart_toStartOf="@+id/guideline"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/categoryIdRef" />-->
 
-    <EditText
-        android:id="@+id/ticketAvailable"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Enter tickets available"
-        android:inputType="number"
-        app:layout_constraintEnd_toStartOf="@+id/guideline4"
-        app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toBottomOf="@+id/textView17" />
+<!--    <EditText-->
+<!--        android:id="@+id/ticketAvailable"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:ems="10"-->
+<!--        android:hint="Enter tickets available"-->
+<!--        android:inputType="number"-->
+<!--        app:layout_constraintEnd_toStartOf="@+id/guideline4"-->
+<!--        app:layout_constraintStart_toStartOf="@+id/guideline"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/textView17" />-->
 
-    <Switch
-        android:id="@+id/isEventActive"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
-        android:text="Is Active?          "
-        app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toBottomOf="@+id/ticketAvailable" />
+<!--    <Switch-->
+<!--        android:id="@+id/isEventActive"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="25dp"-->
+<!--        android:text="Is Active?          "-->
+<!--        app:layout_constraintStart_toStartOf="@+id/guideline"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/ticketAvailable" />-->
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_begin="715dp" />
+<!--    <androidx.constraintlayout.widget.Guideline-->
+<!--        android:id="@+id/guideline5"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:orientation="horizontal"-->
+<!--        app:layout_constraintGuide_begin="715dp" />-->
 </androidx.constraintlayout.widget.ConstraintLayout>
