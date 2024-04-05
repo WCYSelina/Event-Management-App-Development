@@ -77,14 +77,14 @@ public class FragmentListEvent extends Fragment {
 
         // If your data changes later, call notifyDataSetChanged()
         // For example, if you have a method that updates the categories, call it here
-        updateCategoriesList(); // This method internally calls notifyDataSetChanged()
+//        updateCategoriesList(); // This method internally calls notifyDataSetChanged()
         return view;
     }
 
     private ArrayList<Event> readEventsFromSharedPreferences() {
         ArrayList<Event> events = new ArrayList<>();
         // Logic to read categories from SharedPreferences
-        events.add(new Event("id1", "CVE-9999", "hahahah", 9, false));
+
         return events;
     }
 

@@ -88,20 +88,11 @@ public class DashboardActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                onSaveEventClick(view);
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
-    }
-
-    public void onCategoryClick(View view) {
-        Intent intent = new Intent(this, NewEventCategoryActivity.class);
-        startActivity(intent);
-    }
-
-    public void onEventClick(View view) {
-        Intent intent = new Intent(this, NewEventActivity.class);
-        startActivity(intent);
     }
 
     class MyNavigationListener implements NavigationView.OnNavigationItemSelectedListener {
@@ -116,8 +107,9 @@ public class DashboardActivity extends AppCompatActivity {
                 Intent intent = new Intent(DashboardActivity.this, ViewCategoriesActivity.class);
                 startActivity(intent);
             } else if (id == R.id.add_category) {
-
                 // Do something
+                Intent intent = new Intent(DashboardActivity.this, NewEventCategoryActivity.class);
+                startActivity(intent);
             }
             else if (id == R.id.view_events) {
                 // Do something

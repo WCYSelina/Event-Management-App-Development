@@ -15,11 +15,17 @@ import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import com.fit2081.assignment1.Entities.EventCategory;
 import com.fit2081.assignment1.Keys;
 import com.fit2081.assignment1.R;
 import com.fit2081.assignment1.SMSReceiver;
 import com.fit2081.assignment1.Utils;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.StringTokenizer;
 
@@ -56,6 +62,9 @@ public class NewEventCategoryActivity extends AppCompatActivity {
     }
 
     public void onSaveCategoryClick(View view) {
+        // get the list of the categories has been saved previously
+        List<EventCategory> eventCategories = retrievedEventsFromSP();
+
         String categoryName = categoryNameText.getText().toString();
         int eventCount;
 
@@ -80,17 +89,44 @@ public class NewEventCategoryActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
         if(categoryName.length() > 0) {
-            editor.putString(Keys.CATEGORY_ID, categoryId);
-            editor.putString(Keys.CATEGORY_NAME, categoryName);
-            editor.putString(Keys.CATEGORY_EVENT_COUNT, String.valueOf(eventCount));
-            editor.putString(Keys.CATEGORY_IS_ACTIVE, isActiveStr);
+            EventCategory eventCategory = new EventCategory(categoryId, categoryName, eventCount, isActive);
+            eventCategories.add(eventCategory);
 
+            // Create Gson object
+            Gson gson = new Gson();
+            // Convert the list of users to JSON format
+            String json = gson.toJson(eventCategories);
+            // Store the JSON string in SharedPreferences
+            editor.putString(Keys.ALL_CATEGORIES, json);
             editor.apply();
             Toast.makeText(this, "Category saved successfully: " + categoryId, Toast.LENGTH_LONG).show();
         } else {
             toastFillingError();
         }
     }
+
+    public List<EventCategory> retrievedEventsFromSP() {
+        // Get SharedPreferences object
+        SharedPreferences sharedPreferences = getSharedPreferences(Keys.CATEGORY_SP, MODE_PRIVATE);
+
+        // Create Gson object
+        Gson gson = new Gson();
+
+        // Get the stored JSON string, the second parameter is a default value if the key isn't found
+        String json = sharedPreferences.getString(Keys.ALL_CATEGORIES, "");
+
+        // Convert the JSON string back to a EventCategory object
+        List<EventCategory> eventCategories;
+        if (json.isEmpty()) {
+            eventCategories = new ArrayList<>(); // Initialize as an empty list
+        } else {
+            // Specify the type token for the deserialization
+            Type type = new TypeToken<ArrayList<EventCategory>>() {}.getType();
+            eventCategories = gson.fromJson(json, type);
+        }
+        return eventCategories;
+    }
+
     public void toastFillingError() {
         Toast.makeText(this, "Error: Missing parameters or invalid values.", Toast.LENGTH_LONG).show();
     }
