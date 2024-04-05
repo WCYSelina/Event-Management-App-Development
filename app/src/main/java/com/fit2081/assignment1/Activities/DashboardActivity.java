@@ -21,6 +21,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.widget.Toolbar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.fit2081.assignment1.Entities.Event;
 import com.fit2081.assignment1.Fragments.FragmentListCategory;
@@ -153,8 +155,12 @@ public class DashboardActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.refresh) {
-            // Do something
-
+            // Obtain the fragment and call a method to refresh data
+            Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_list_category);
+            if (currentFragment instanceof FragmentListCategory) {
+                ((FragmentListCategory) currentFragment).updateCategoriesList();
+            }
+            return true;
 
         } else if (id == R.id.clear_event) {
             // Do something

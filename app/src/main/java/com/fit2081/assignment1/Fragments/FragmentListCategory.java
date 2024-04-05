@@ -125,7 +125,7 @@ public class FragmentListCategory extends Fragment {
         return eventCategories;
     }
 
-    private void updateCategoriesList() {
+    public void updateCategoriesList() {
         categories.clear();
         categories.addAll(retrievedCategoriesFromSP()); // or however you update your data
         adapter.notifyDataSetChanged(); // Notify the adapter to refresh the RecyclerView

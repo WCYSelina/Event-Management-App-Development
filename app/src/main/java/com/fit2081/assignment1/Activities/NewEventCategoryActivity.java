@@ -96,7 +96,7 @@ public class NewEventCategoryActivity extends AppCompatActivity {
             // Convert the list of users to JSON format
             String json = gson.toJson(eventCategories);
             // Store the JSON string in SharedPreferences
-            editor.putString(Keys.ALL_EVENT, json);
+            editor.putString(Keys.ALL_CATEGORIES, json);
             editor.apply();
             Toast.makeText(this, "Category saved successfully: " + categoryId, Toast.LENGTH_LONG).show();
         } else {
