@@ -1,8 +1,11 @@
 package com.fit2081.assignment1.Activities;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.os.Bundle;
+import android.view.MenuItem;
 
 import com.fit2081.assignment1.Fragments.FragmentListEvent;
 import com.fit2081.assignment1.R;
@@ -35,5 +38,24 @@ public class ListEventActivity extends AppCompatActivity {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.fragment_list_event, firstFragment).commit();
         }
+
+        Toolbar toolbar = findViewById(R.id.toolbar3);
+        setSupportActionBar(toolbar);
+
+        // Enable the Up button
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                // This ID represents the Home or Up button; in the case of this
+                // activity, the Up button is shown.
+                finish(); // will close the current activity and return to the previous one
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

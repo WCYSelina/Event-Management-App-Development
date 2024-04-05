@@ -90,7 +90,7 @@ public class FragmentListCategory extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         // Initialize categories list
-        categories = retrievedEventsFromSP();
+        categories = retrievedCategoriesFromSP();
 
         adapter = new CategoryAdapter(categories);
         recyclerView.setAdapter(adapter);
@@ -103,7 +103,7 @@ public class FragmentListCategory extends Fragment {
 
 
 
-    public List<EventCategory> retrievedEventsFromSP() {
+    public List<EventCategory> retrievedCategoriesFromSP() {
         // Get SharedPreferences object
         SharedPreferences sharedPreferences = getContext().getSharedPreferences(Keys.CATEGORY_SP, MODE_PRIVATE);
 
@@ -127,7 +127,7 @@ public class FragmentListCategory extends Fragment {
 
     private void updateCategoriesList() {
         categories.clear();
-        categories.addAll(retrievedEventsFromSP()); // or however you update your data
+        categories.addAll(retrievedCategoriesFromSP()); // or however you update your data
         adapter.notifyDataSetChanged(); // Notify the adapter to refresh the RecyclerView
     }
 }

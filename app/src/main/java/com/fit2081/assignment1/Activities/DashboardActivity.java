@@ -22,6 +22,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.widget.Toolbar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 
+import com.fit2081.assignment1.Entities.Event;
 import com.fit2081.assignment1.Fragments.FragmentListCategory;
 import com.fit2081.assignment1.Keys;
 import com.fit2081.assignment1.R;
@@ -30,7 +31,12 @@ import com.fit2081.assignment1.Utils;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.StringTokenizer;
 
 public class DashboardActivity extends AppCompatActivity {
@@ -233,7 +239,32 @@ public class DashboardActivity extends AppCompatActivity {
         return startWithC && is2nd3rdAlpha && isHyphen && isFourDigits;
     }
 
+    public List<Event> retrievedEventsFromSP() {
+        // Get SharedPreferences object
+        SharedPreferences sharedPreferences = getSharedPreferences(Keys.EVENT_SP, MODE_PRIVATE);
+
+        // Create Gson object
+        Gson gson = new Gson();
+
+        // Get the stored JSON string, the second parameter is a default value if the key isn't found
+        String json = sharedPreferences.getString(Keys.ALL_EVENT, "");
+
+        // Convert the JSON string back to a EventCategory object
+        List<Event> events;
+        if (json.isEmpty()) {
+            events = new ArrayList<>(); // Initialize as an empty list
+        } else {
+            // Specify the type token for the deserialization
+            Type type = new TypeToken<ArrayList<Event>>() {}.getType();
+            events = gson.fromJson(json, type);
+        }
+        return events;
+    }
+
     public void onSaveEventClick(View view) {
+        // get the list of the categories has been saved previously
+        List<Event> events = retrievedEventsFromSP();
+
         //generate event ID
         String eventID = Utils.generateEventId();
         String eventName = eventNameText.getText().toString();
@@ -260,12 +291,15 @@ public class DashboardActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
         if (eventName.length() > 0 && checkValidCategoryID(categoryIdRef)) {
-            editor.putString(Keys.EVENT_ID, eventID);
-            editor.putString(Keys.EVENT_NAME, eventName);
-            editor.putString(Keys.CATEGORY_ID_REF, categoryIdRef);
-            editor.putString(Keys.TICKETS_AVAILABLE, String.valueOf(ticketsAvailable));
-            editor.putString(Keys.EVENT_IS_ACTIVE, isActiveStr);
+            Event event = new Event(eventID, categoryIdRef, eventName, ticketsAvailable, isActive);
+            events.add(event);
 
+            // Create Gson object
+            Gson gson = new Gson();
+            // Convert the list of users to JSON format
+            String json = gson.toJson(events);
+            // Store the JSON string in SharedPreferences
+            editor.putString(Keys.ALL_EVENT, json);
             editor.apply();
             Toast.makeText(this, "Category saved successfully: " + eventID + " to " + categoryIdRef, Toast.LENGTH_LONG).show();
         } else {

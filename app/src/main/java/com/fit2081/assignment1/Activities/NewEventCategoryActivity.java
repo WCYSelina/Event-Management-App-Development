@@ -26,7 +26,6 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.StringTokenizer;
 
 public class NewEventCategoryActivity extends AppCompatActivity {
@@ -63,7 +62,7 @@ public class NewEventCategoryActivity extends AppCompatActivity {
 
     public void onSaveCategoryClick(View view) {
         // get the list of the categories has been saved previously
-        List<EventCategory> eventCategories = retrievedEventsFromSP();
+        List<EventCategory> eventCategories = retrievedCategoriesFromSP();
 
         String categoryName = categoryNameText.getText().toString();
         int eventCount;
@@ -97,7 +96,7 @@ public class NewEventCategoryActivity extends AppCompatActivity {
             // Convert the list of users to JSON format
             String json = gson.toJson(eventCategories);
             // Store the JSON string in SharedPreferences
-            editor.putString(Keys.ALL_CATEGORIES, json);
+            editor.putString(Keys.ALL_EVENT, json);
             editor.apply();
             Toast.makeText(this, "Category saved successfully: " + categoryId, Toast.LENGTH_LONG).show();
         } else {
@@ -105,7 +104,7 @@ public class NewEventCategoryActivity extends AppCompatActivity {
         }
     }
 
-    public List<EventCategory> retrievedEventsFromSP() {
+    public List<EventCategory> retrievedCategoriesFromSP() {
         // Get SharedPreferences object
         SharedPreferences sharedPreferences = getSharedPreferences(Keys.CATEGORY_SP, MODE_PRIVATE);
 

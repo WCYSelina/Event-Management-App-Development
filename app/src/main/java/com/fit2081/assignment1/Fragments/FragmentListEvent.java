@@ -1,5 +1,8 @@
 package com.fit2081.assignment1.Fragments;
 
+import static android.content.Context.MODE_PRIVATE;
+
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -14,8 +17,12 @@ import com.fit2081.assignment1.CategoryAdapter;
 import com.fit2081.assignment1.Entities.Event;
 import com.fit2081.assignment1.Entities.EventCategory;
 import com.fit2081.assignment1.EventAdapter;
+import com.fit2081.assignment1.Keys;
 import com.fit2081.assignment1.R;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,27 +77,42 @@ public class FragmentListEvent extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         // Initialize categories list
-        events = readEventsFromSharedPreferences();
+        events = retrievedEventsFromSP();
 
         adapter = new EventAdapter(events);
         recyclerView.setAdapter(adapter);
 
         // If your data changes later, call notifyDataSetChanged()
         // For example, if you have a method that updates the categories, call it here
-//        updateCategoriesList(); // This method internally calls notifyDataSetChanged()
+        updateCategoriesList(); // This method internally calls notifyDataSetChanged()
         return view;
     }
 
-    private ArrayList<Event> readEventsFromSharedPreferences() {
-        ArrayList<Event> events = new ArrayList<>();
-        // Logic to read categories from SharedPreferences
+    public List<Event> retrievedEventsFromSP() {
+        // Get SharedPreferences object
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences(Keys.EVENT_SP, MODE_PRIVATE);
 
+        // Create Gson object
+        Gson gson = new Gson();
+
+        // Get the stored JSON string, the second parameter is a default value if the key isn't found
+        String json = sharedPreferences.getString(Keys.ALL_EVENT, "");
+
+        // Convert the JSON string back to a EventCategory object
+        List<Event> events;
+        if (json.isEmpty()) {
+            events = new ArrayList<>(); // Initialize as an empty list
+        } else {
+            // Specify the type token for the deserialization
+            Type type = new TypeToken<ArrayList<Event>>() {}.getType();
+            events = gson.fromJson(json, type);
+        }
         return events;
     }
 
     private void updateCategoriesList() {
         events.clear();
-        events.addAll(readEventsFromSharedPreferences()); // or however you update your data
+        events.addAll(retrievedEventsFromSP()); // or however you update your data
         adapter.notifyDataSetChanged(); // Notify the adapter to refresh the RecyclerView
     }
 }
