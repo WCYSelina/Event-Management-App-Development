@@ -13,6 +13,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.widget.Toolbar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 
+import com.fit2081.assignment1.Fragments.FragmentListCategory;
 import com.fit2081.assignment1.R;
 import com.google.android.material.navigation.NavigationView;
 
@@ -57,6 +58,9 @@ public class DashboardActivity extends AppCompatActivity {
 
             if (id == R.id.view_categories) {
                 // Do something
+                // Show FragmentListCategory when navigation item for categories is selected
+                Intent intent = new Intent(DashboardActivity.this, ViewAllCategoriesActivityMainActivity.class);
+                startActivity(intent);
             } else if (id == R.id.add_category) {
                 // Do something
             }
