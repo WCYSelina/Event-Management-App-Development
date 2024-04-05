@@ -5,17 +5,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.fit2081.assignment1.Fragments.FragmentListCategory;
+import com.fit2081.assignment1.Fragments.FragmentListEvent;
 import com.fit2081.assignment1.R;
 
-public class ViewAllCategoriesActivityMainActivity extends AppCompatActivity {
+public class ViewEventsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_all_categories_main);
+        setContentView(R.layout.activity_view_events);
         // Check that the activity is using the layout version with
         // the fragment_container FrameLayout
-        if (findViewById(R.id.fragment_list_category) != null) {
+        if (findViewById(R.id.fragment_list_event) != null) {
 
             // However, if we're being restored from a previous state,
             // then we don't need to do anything and should return or else
@@ -25,7 +26,7 @@ public class ViewAllCategoriesActivityMainActivity extends AppCompatActivity {
             }
 
             // Create an instance of FragmentListCategory
-            FragmentListCategory firstFragment = new FragmentListCategory();
+            FragmentListEvent firstFragment = new FragmentListEvent();
 
             // In case this activity was started with special instructions from an Intent,
             // pass the Intent's extras to the fragment as arguments
@@ -33,7 +34,7 @@ public class ViewAllCategoriesActivityMainActivity extends AppCompatActivity {
 
             // Add the fragment to the 'fragment_container' FrameLayout
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.fragment_list_category, firstFragment).commit();
+                    .add(R.id.fragment_list_event, firstFragment).commit();
         }
     }
 }

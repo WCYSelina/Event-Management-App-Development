@@ -1,5 +1,4 @@
 package com.fit2081.assignment1;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.fit2081.assignment1.Entities.EventCategory;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHolder> {
@@ -27,7 +25,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_layout, parent, false); //CardView inflated as RecyclerView list item
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.category_card_layout, parent, false); //CardView inflated as RecyclerView list item
         ViewHolder viewHolder = new ViewHolder(v);
 //        Log.d("week6App","onCreateViewHolder");
         return viewHolder;

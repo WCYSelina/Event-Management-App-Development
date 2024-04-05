@@ -20,6 +20,7 @@ import com.fit2081.assignment1.R;
 import com.fit2081.assignment1.SMSReceiver;
 import com.fit2081.assignment1.Utils;
 
+import java.sql.SQLOutput;
 import java.util.StringTokenizer;
 
 public class NewEventActivity extends AppCompatActivity {
@@ -32,7 +33,8 @@ public class NewEventActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_new_event);
+//        setContentView(R.layout.activity_new_event);
+        setContentView(R.layout.activity_dashboard);
 
         eventNameText = findViewById(R.id.eventName);
         categoryIdRefText = findViewById(R.id.categoryIdRef);
