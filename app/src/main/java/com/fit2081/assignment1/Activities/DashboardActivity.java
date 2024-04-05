@@ -46,6 +46,7 @@ public class DashboardActivity extends AppCompatActivity {
     EditText eventNameText;
     EditText categoryIdRefText;
     EditText ticketAvailableText;
+    EditText eventIDText;
     Switch isActiveSwitch;
     DrawerLayout drawerLayout;
     FloatingActionButton fab;
@@ -64,6 +65,7 @@ public class DashboardActivity extends AppCompatActivity {
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
+        eventIDText = findViewById(R.id.eventID);
         eventNameText = findViewById(R.id.eventName);
         categoryIdRefText = findViewById(R.id.categoryIdRef);
         isActiveSwitch = findViewById(R.id.isEventActive);
@@ -164,6 +166,11 @@ public class DashboardActivity extends AppCompatActivity {
 
         } else if (id == R.id.clear_event) {
             // Do something
+            eventIDText.setText("");
+            eventNameText.setText("");
+            categoryIdRefText.setText("");
+            ticketAvailableText.setText("");
+            isActiveSwitch.setChecked(false);
         }
         else if (id == R.id.delete_categories) {
             // Do something

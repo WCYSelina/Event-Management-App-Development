@@ -4,7 +4,8 @@
 
     <item
         android:id="@+id/clear_event"
-        android:title="Clear Event Form" />
+        android:title="Clear Event Form"
+        />
 
     <item
         android:id="@+id/delete_categories"
