@@ -1,5 +1,18 @@
 package com.fit2081.assignment1;
 
+import static android.content.Context.MODE_PRIVATE;
+
+import android.content.Context;
+import android.content.SharedPreferences;
+
+import com.fit2081.assignment1.Entities.Event;
+import com.fit2081.assignment1.Entities.EventCategory;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class Utils {
@@ -38,5 +51,49 @@ public class Utils {
         } else {
             return null; // Return null for any other value
         }
+    }
+
+    public static List<EventCategory> retrievedCategoriesFromSP(Context context) {
+        // Get SharedPreferences object
+        SharedPreferences sharedPreferences = context.getSharedPreferences(Keys.CATEGORY_SP, MODE_PRIVATE);
+
+        // Create Gson object
+        Gson gson = new Gson();
+
+        // Get the stored JSON string, the second parameter is a default value if the key isn't found
+        String json = sharedPreferences.getString(Keys.ALL_CATEGORIES, "");
+
+        // Convert the JSON string back to a EventCategory object
+        List<EventCategory> eventCategories;
+        if (json.isEmpty()) {
+            eventCategories = new ArrayList<>(); // Initialize as an empty list
+        } else {
+            // Specify the type token for the deserialization
+            Type type = new TypeToken<ArrayList<EventCategory>>() {}.getType();
+            eventCategories = gson.fromJson(json, type);
+        }
+        return eventCategories;
+    }
+
+    public static List<Event> retrievedEventsFromSP(Context context) {
+        // Get SharedPreferences object
+        SharedPreferences sharedPreferences = context.getSharedPreferences(Keys.EVENT_SP, MODE_PRIVATE);
+
+        // Create Gson object
+        Gson gson = new Gson();
+
+        // Get the stored JSON string, the second parameter is a default value if the key isn't found
+        String json = sharedPreferences.getString(Keys.ALL_EVENT, "");
+
+        // Convert the JSON string back to a EventCategory object
+        List<Event> events;
+        if (json.isEmpty()) {
+            events = new ArrayList<>(); // Initialize as an empty list
+        } else {
+            // Specify the type token for the deserialization
+            Type type = new TypeToken<ArrayList<Event>>() {}.getType();
+            events = gson.fromJson(json, type);
+        }
+        return events;
     }
 }

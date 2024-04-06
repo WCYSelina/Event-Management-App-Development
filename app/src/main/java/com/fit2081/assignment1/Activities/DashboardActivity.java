@@ -22,8 +22,6 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.widget.Toolbar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-
 import com.fit2081.assignment1.Entities.Event;
 import com.fit2081.assignment1.Fragments.FragmentListCategory;
 import com.fit2081.assignment1.Keys;
@@ -177,6 +175,7 @@ public class DashboardActivity extends AppCompatActivity {
         }
         else if (id == R.id.delete_events) {
             // Do something
+            storingEvents(new ArrayList<>());
         }
         // tell the OS
         return true;
@@ -252,31 +251,9 @@ public class DashboardActivity extends AppCompatActivity {
         return startWithC && is2nd3rdAlpha && isHyphen && isFourDigits;
     }
 
-    public List<Event> retrievedEventsFromSP() {
-        // Get SharedPreferences object
-        SharedPreferences sharedPreferences = getSharedPreferences(Keys.EVENT_SP, MODE_PRIVATE);
-
-        // Create Gson object
-        Gson gson = new Gson();
-
-        // Get the stored JSON string, the second parameter is a default value if the key isn't found
-        String json = sharedPreferences.getString(Keys.ALL_EVENT, "");
-
-        // Convert the JSON string back to a EventCategory object
-        List<Event> events;
-        if (json.isEmpty()) {
-            events = new ArrayList<>(); // Initialize as an empty list
-        } else {
-            // Specify the type token for the deserialization
-            Type type = new TypeToken<ArrayList<Event>>() {}.getType();
-            events = gson.fromJson(json, type);
-        }
-        return events;
-    }
-
     public void onSaveEventClick(View view) {
         // get the list of the categories has been saved previously
-        List<Event> events = retrievedEventsFromSP();
+        List<Event> events = Utils.retrievedEventsFromSP(getApplicationContext());
 
         //generate event ID
         String eventID = Utils.generateEventId();
@@ -300,25 +277,30 @@ public class DashboardActivity extends AppCompatActivity {
             return;
         }
 
-        SharedPreferences sharedPreferences = getSharedPreferences(Keys.EVENT_SP, MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-
         if (eventName.length() > 0 && checkValidCategoryID(categoryIdRef)) {
             Event event = new Event(eventID, categoryIdRef, eventName, ticketsAvailable, isActive);
             events.add(event);
 
-            // Create Gson object
-            Gson gson = new Gson();
-            // Convert the list of users to JSON format
-            String json = gson.toJson(events);
-            // Store the JSON string in SharedPreferences
-            editor.putString(Keys.ALL_EVENT, json);
-            editor.apply();
+            storingEvents(events);
             Toast.makeText(this, "Category saved successfully: " + eventID + " to " + categoryIdRef, Toast.LENGTH_LONG).show();
         } else {
             toastFillingError();
         }
     }
+
+    public void storingEvents(List<Event> events) {
+        SharedPreferences sharedPreferences = getSharedPreferences(Keys.EVENT_SP, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        // Create Gson object
+        Gson gson = new Gson();
+        // Convert the list of users to JSON format
+        String json = gson.toJson(events);
+        // Store the JSON string in SharedPreferences
+        editor.putString(Keys.ALL_EVENT, json);
+        editor.apply();
+    }
+
 
     public void toastFillingError() {
         Toast.makeText(this, "Error: Missing parameters or invalid values.", Toast.LENGTH_LONG).show();

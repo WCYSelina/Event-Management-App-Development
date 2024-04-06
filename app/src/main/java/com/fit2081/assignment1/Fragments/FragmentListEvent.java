@@ -19,6 +19,7 @@ import com.fit2081.assignment1.Entities.EventCategory;
 import com.fit2081.assignment1.EventAdapter;
 import com.fit2081.assignment1.Keys;
 import com.fit2081.assignment1.R;
+import com.fit2081.assignment1.Utils;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -77,7 +78,7 @@ public class FragmentListEvent extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         // Initialize categories list
-        events = retrievedEventsFromSP();
+        events = Utils.retrievedEventsFromSP(getContext());
 
         adapter = new EventAdapter(events);
         recyclerView.setAdapter(adapter);
@@ -88,31 +89,9 @@ public class FragmentListEvent extends Fragment {
         return view;
     }
 
-    public List<Event> retrievedEventsFromSP() {
-        // Get SharedPreferences object
-        SharedPreferences sharedPreferences = getContext().getSharedPreferences(Keys.EVENT_SP, MODE_PRIVATE);
-
-        // Create Gson object
-        Gson gson = new Gson();
-
-        // Get the stored JSON string, the second parameter is a default value if the key isn't found
-        String json = sharedPreferences.getString(Keys.ALL_EVENT, "");
-
-        // Convert the JSON string back to a EventCategory object
-        List<Event> events;
-        if (json.isEmpty()) {
-            events = new ArrayList<>(); // Initialize as an empty list
-        } else {
-            // Specify the type token for the deserialization
-            Type type = new TypeToken<ArrayList<Event>>() {}.getType();
-            events = gson.fromJson(json, type);
-        }
-        return events;
-    }
-
     private void updateCategoriesList() {
         events.clear();
-        events.addAll(retrievedEventsFromSP()); // or however you update your data
+        events.addAll(Utils.retrievedEventsFromSP(getContext())); // or however you update your data
         adapter.notifyDataSetChanged(); // Notify the adapter to refresh the RecyclerView
     }
 }

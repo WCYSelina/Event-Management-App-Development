@@ -62,7 +62,7 @@ public class NewEventCategoryActivity extends AppCompatActivity {
 
     public void onSaveCategoryClick(View view) {
         // get the list of the categories has been saved previously
-        List<EventCategory> eventCategories = retrievedCategoriesFromSP();
+        List<EventCategory> eventCategories = Utils.retrievedCategoriesFromSP(getApplicationContext());
 
         String categoryName = categoryNameText.getText().toString();
         int eventCount;
@@ -102,28 +102,6 @@ public class NewEventCategoryActivity extends AppCompatActivity {
         } else {
             toastFillingError();
         }
-    }
-
-    public List<EventCategory> retrievedCategoriesFromSP() {
-        // Get SharedPreferences object
-        SharedPreferences sharedPreferences = getSharedPreferences(Keys.CATEGORY_SP, MODE_PRIVATE);
-
-        // Create Gson object
-        Gson gson = new Gson();
-
-        // Get the stored JSON string, the second parameter is a default value if the key isn't found
-        String json = sharedPreferences.getString(Keys.ALL_CATEGORIES, "");
-
-        // Convert the JSON string back to a EventCategory object
-        List<EventCategory> eventCategories;
-        if (json.isEmpty()) {
-            eventCategories = new ArrayList<>(); // Initialize as an empty list
-        } else {
-            // Specify the type token for the deserialization
-            Type type = new TypeToken<ArrayList<EventCategory>>() {}.getType();
-            eventCategories = gson.fromJson(json, type);
-        }
-        return eventCategories;
     }
 
     public void toastFillingError() {

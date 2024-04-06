@@ -74,31 +74,9 @@ public class NewEventActivity extends AppCompatActivity {
         return startWithC && is2nd3rdAlpha && isHyphen && isFourDigits;
     }
 
-    public List<Event> retrievedEventsFromSP() {
-        // Get SharedPreferences object
-        SharedPreferences sharedPreferences = getSharedPreferences(Keys.EVENT_SP, MODE_PRIVATE);
-
-        // Create Gson object
-        Gson gson = new Gson();
-
-        // Get the stored JSON string, the second parameter is a default value if the key isn't found
-        String json = sharedPreferences.getString(Keys.ALL_EVENT, "");
-
-        // Convert the JSON string back to a EventCategory object
-        List<Event> events;
-        if (json.isEmpty()) {
-            events = new ArrayList<>(); // Initialize as an empty list
-        } else {
-            // Specify the type token for the deserialization
-            Type type = new TypeToken<ArrayList<Event>>() {}.getType();
-            events = gson.fromJson(json, type);
-        }
-        return events;
-    }
-
     public void onSaveEventClick(View view) {
         // get the list of the categories has been saved previously
-        List<Event> events = retrievedEventsFromSP();
+        List<Event> events = Utils.retrievedEventsFromSP(getApplicationContext());
 
         //generate event ID
         String eventID = Utils.generateEventId();
