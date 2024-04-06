@@ -29,8 +29,12 @@ public class EventCategory {
         return eventCount;
     }
 
-    public void setEventCount(int eventCount) {
-        this.eventCount = eventCount;
+    public void resetEventCount() {
+        this.eventCount = 0;
+    }
+
+    public void addEventCount() {
+        this.eventCount += 1;
     }
 
     public boolean isActive() {

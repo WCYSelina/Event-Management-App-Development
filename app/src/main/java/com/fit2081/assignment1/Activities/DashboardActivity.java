@@ -23,6 +23,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.fragment.app.Fragment;
 import com.fit2081.assignment1.Entities.Event;
+import com.fit2081.assignment1.Entities.EventCategory;
 import com.fit2081.assignment1.Fragments.FragmentListCategory;
 import com.fit2081.assignment1.Keys;
 import com.fit2081.assignment1.R;
@@ -96,14 +97,16 @@ public class DashboardActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onSaveEventClick(view);
-                Snackbar.make(view, "Event Saved", Snackbar.LENGTH_LONG)
-                        .setAction("Undo", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                undoSavingEvent();
-                            }
-                        }).show();
+                boolean isSaved = onSaveEventClick(view);
+                if (isSaved) {
+                    Snackbar.make(view, "Event Saved", Snackbar.LENGTH_LONG)
+                            .setAction("Undo", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    undoSavingEvent();
+                                }
+                            }).show();
+                }
             }
         });
     }
@@ -207,6 +210,11 @@ public class DashboardActivity extends AppCompatActivity {
         else if (id == R.id.delete_events) {
             // Do something
             Utils.storingEvents(new ArrayList<>(), getApplicationContext());
+            List<EventCategory> eventCategories = Utils.retrievedCategoriesFromSP(getApplicationContext());
+            for (int i = 0; i < eventCategories.size(); i++) {
+                eventCategories.get(i).resetEventCount();
+            }
+            Utils.storingCategories(eventCategories, getApplicationContext());
         }
         // tell the OS
         return true;
@@ -247,11 +255,11 @@ public class DashboardActivity extends AppCompatActivity {
                     //check if it is a valid true or false (case-insensitive)
                     isActiveStr = Utils.stringToBooleanOrNull(sT.nextToken());
 
-                    // check if the name is empty, and if the category id is valid
-                    if ("event".equals(eventParts[0]) && eventParts[1].length() > 0 && checkValidCategoryID(categoryIdRef)) {
+                    // if the category id is valid
+                    if ("event".equals(eventParts[0]) && checkValidCategoryID(categoryIdRef)) {
                         eventName = eventParts[1];
                     } else {
-                        throw new Exception();
+                        throw new Exception("h");
                     }
                     /*
                      * Now, its time to update the UI
@@ -262,8 +270,9 @@ public class DashboardActivity extends AppCompatActivity {
                     isActiveSwitch.setChecked(isActiveStr);
 
                 } catch (Exception e) {
+                    System.out.println("2");
                     // this catch all the error that will occur in try block
-                    toastFillingError();
+                    toastFillingError(e.getMessage());
                 }
             }
         }
@@ -284,7 +293,7 @@ public class DashboardActivity extends AppCompatActivity {
         return startWithC && is2nd3rdAlpha && isHyphen && isFourDigits;
     }
 
-    public void onSaveEventClick(View view) {
+    public boolean onSaveEventClick(View view) {
         // get the list of the categories has been saved previously
         List<Event> events = Utils.retrievedEventsFromSP(getApplicationContext());
 
@@ -300,28 +309,40 @@ public class DashboardActivity extends AppCompatActivity {
         int ticketsAvailable;
         try {
             ticketsAvailable = Integer.parseInt(ticketAvailableText.getText().toString());
-            if (ticketsAvailable == 0) {
-                throw new Exception();
+            if (ticketsAvailable < 0) {
+                throw new Exception("Invalid 'Tickets available'");
             }
-        } catch (NumberFormatException e) {
-            ticketsAvailable = 1; // Since we can only have positive integer only, so the default value is 1
-        } catch (Exception e) {
-            toastFillingError();
-            return;
+
+        }  catch (NumberFormatException e) {
+            ticketsAvailable = 0;
+        }
+        catch (Exception e) {
+            toastFillingError(e.getMessage());
+            return false;
         }
 
-        if (eventName.length() > 0 && checkValidCategoryID(categoryIdRef)) {
-            latestSavedEvent = new Event(eventID, categoryIdRef, eventName, ticketsAvailable, isActive);
-            events.add(latestSavedEvent);
-            Utils.storingEvents(events, getApplicationContext());
-
-            Toast.makeText(this, "Category saved successfully: " + eventID + " to " + categoryIdRef, Toast.LENGTH_LONG).show();
-        } else {
-            toastFillingError();
+        if (!eventName.matches("[A-Za-z0-9 ]+") && !eventName.matches("[A-Za-z ]+")) {
+            toastFillingError("Invalid event name");
+            return false;
         }
+        List<EventCategory> eventCategories = Utils.retrievedCategoriesFromSP(getApplicationContext());
+        for (int i = 0; i < eventCategories.size(); i++) {
+            EventCategory category = eventCategories.get(i);
+            if (category.getCategoryID().equals(categoryIdRef)) {
+                category.addEventCount();
+                Utils.storingCategories(eventCategories, getApplicationContext());
+                latestSavedEvent = new Event(eventID, categoryIdRef, eventName, ticketsAvailable, isActive);
+                events.add(latestSavedEvent);
+                Utils.storingEvents(events, getApplicationContext());
+                Toast.makeText(this, "Category saved successfully: " + eventID + " to " + categoryIdRef, Toast.LENGTH_LONG).show();
+                return true;
+            }
+        }
+        toastFillingError("Category does not exist");
+        return false;
     }
 
-    public void toastFillingError() {
-        Toast.makeText(this, "Error: Missing parameters or invalid values.", Toast.LENGTH_LONG).show();
+    public void toastFillingError(String strError) {
+        Toast.makeText(this, strError, Toast.LENGTH_LONG).show();
     }
 }
