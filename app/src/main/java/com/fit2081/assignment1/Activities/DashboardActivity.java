@@ -31,6 +31,8 @@ import com.fit2081.assignment1.Utils;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.gson.Gson;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -44,6 +46,8 @@ public class DashboardActivity extends AppCompatActivity {
     Switch isActiveSwitch;
     DrawerLayout drawerLayout;
     FloatingActionButton fab;
+
+    Event latestSavedEvent;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,10 +97,26 @@ public class DashboardActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 onSaveEventClick(view);
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Snackbar.make(view, "Event Saved", Snackbar.LENGTH_LONG)
+                        .setAction("Undo", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                undoSavingEvent();
+                            }
+                        }).show();
             }
         });
+    }
+
+    public void undoSavingEvent() {
+        List<Event> events = Utils.retrievedEventsFromSP(getApplicationContext());
+        for (int i = 0; i < events.size(); i++) {
+            // find the event that is to be undone
+            if (events.get(i).getEventID().equals(this.latestSavedEvent.getEventID())) {
+                events.remove(i);
+            }
+        }
+        Utils.storingEvents(events, getApplicationContext());
     }
 
     class MyNavigationListener implements NavigationView.OnNavigationItemSelectedListener {
@@ -275,10 +295,10 @@ public class DashboardActivity extends AppCompatActivity {
         }
 
         if (eventName.length() > 0 && checkValidCategoryID(categoryIdRef)) {
-            Event event = new Event(eventID, categoryIdRef, eventName, ticketsAvailable, isActive);
-            events.add(event);
-
+            latestSavedEvent = new Event(eventID, categoryIdRef, eventName, ticketsAvailable, isActive);
+            events.add(latestSavedEvent);
             Utils.storingEvents(events, getApplicationContext());
+
             Toast.makeText(this, "Category saved successfully: " + eventID + " to " + categoryIdRef, Toast.LENGTH_LONG).show();
         } else {
             toastFillingError();
