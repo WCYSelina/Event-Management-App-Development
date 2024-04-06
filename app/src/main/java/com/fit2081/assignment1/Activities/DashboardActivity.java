@@ -46,8 +46,8 @@ public class DashboardActivity extends AppCompatActivity {
     Switch isActiveSwitch;
     DrawerLayout drawerLayout;
     FloatingActionButton fab;
-
     Event latestSavedEvent;
+    private boolean isActive = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,6 +106,20 @@ public class DashboardActivity extends AppCompatActivity {
                         }).show();
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        isActive = true;
+        // Start reading messages specific to MainActivity
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        isActive = false;
+        // Stop reading messages or ignore incoming ones
     }
 
     public void undoSavingEvent() {
@@ -205,50 +219,52 @@ public class DashboardActivity extends AppCompatActivity {
          * */
         @Override
         public void onReceive(Context context, Intent intent) {
-            /*
-             * Retrieve the message from the intent
-             * */
-            String msg = intent.getStringExtra(SMSReceiver.SMS_MSG_KEY);
-            /*
-             * String Tokenizer is used to parse the incoming message
-             * The protocol is to have the account holder name and account number separate by a semicolon
-             * */
-            StringTokenizer sT = new StringTokenizer(msg, ";");
-
-            String eventName;
-            String categoryIdRef;
-            int ticketsAvailable;
-            boolean isActiveStr;
-            // here I use int and boolean here is because it can check the token type
-            // if the token can't be converted to be a specific type that it should be
-            // that means the message is not valid
-            // it will catch the error and toast
-            try {
-                String eventToken = sT.nextToken(); // "category:Melbourne"
-                String[] eventParts = eventToken.split(":"); // Split by colon
-                categoryIdRef = sT.nextToken();
-                ticketsAvailable = Integer.parseInt(sT.nextToken());
-
-                //check if it is a valid true or false (case-insensitive)
-                isActiveStr = Utils.stringToBooleanOrNull(sT.nextToken());
-
-                // check if the name is empty, and if the category id is valid
-                if ("event".equals(eventParts[0]) && eventParts[1].length() > 0 && checkValidCategoryID(categoryIdRef)) {
-                    eventName = eventParts[1];
-                } else {
-                    throw new Exception();
-                }
+            if (isActive) {
                 /*
-                 * Now, its time to update the UI
+                 * Retrieve the message from the intent
                  * */
-                eventNameText.setText(eventName);
-                categoryIdRefText.setText(categoryIdRef);
-                ticketAvailableText.setText(String.valueOf(ticketsAvailable));
-                isActiveSwitch.setChecked(isActiveStr);
+                String msg = intent.getStringExtra(SMSReceiver.SMS_MSG_KEY);
+                /*
+                 * String Tokenizer is used to parse the incoming message
+                 * The protocol is to have the account holder name and account number separate by a semicolon
+                 * */
+                StringTokenizer sT = new StringTokenizer(msg, ";");
 
-            } catch (Exception e) {
-                // this catch all the error that will occur in try block
-                toastFillingError();
+                String eventName;
+                String categoryIdRef;
+                int ticketsAvailable;
+                boolean isActiveStr;
+                // here I use int and boolean here is because it can check the token type
+                // if the token can't be converted to be a specific type that it should be
+                // that means the message is not valid
+                // it will catch the error and toast
+                try {
+                    String eventToken = sT.nextToken(); // "category:Melbourne"
+                    String[] eventParts = eventToken.split(":"); // Split by colon
+                    categoryIdRef = sT.nextToken();
+                    ticketsAvailable = Integer.parseInt(sT.nextToken());
+
+                    //check if it is a valid true or false (case-insensitive)
+                    isActiveStr = Utils.stringToBooleanOrNull(sT.nextToken());
+
+                    // check if the name is empty, and if the category id is valid
+                    if ("event".equals(eventParts[0]) && eventParts[1].length() > 0 && checkValidCategoryID(categoryIdRef)) {
+                        eventName = eventParts[1];
+                    } else {
+                        throw new Exception();
+                    }
+                    /*
+                     * Now, its time to update the UI
+                     * */
+                    eventNameText.setText(eventName);
+                    categoryIdRefText.setText(categoryIdRef);
+                    ticketAvailableText.setText(String.valueOf(ticketsAvailable));
+                    isActiveSwitch.setChecked(isActiveStr);
+
+                } catch (Exception e) {
+                    // this catch all the error that will occur in try block
+                    toastFillingError();
+                }
             }
         }
     }

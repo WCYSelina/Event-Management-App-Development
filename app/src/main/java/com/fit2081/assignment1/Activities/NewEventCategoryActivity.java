@@ -32,6 +32,7 @@ public class NewEventCategoryActivity extends AppCompatActivity {
     EditText categoryNameText;
     EditText eventCountText;
     Switch isActiveSwitch;
+    private boolean isActive = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +61,20 @@ public class NewEventCategoryActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        isActive = true;
+        // Start reading messages specific to OtherActivity
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        isActive = false;
+        // Stop reading messages or ignore incoming ones
+    }
+
     public void onSaveCategoryClick(View view) {
         // get the list of the categories has been saved previously
         List<EventCategory> eventCategories = Utils.retrievedCategoriesFromSP(getApplicationContext());
@@ -69,11 +84,11 @@ public class NewEventCategoryActivity extends AppCompatActivity {
 
         try {
             eventCount = Integer.parseInt(eventCountText.getText().toString());
-            if (eventCount == 0) {
+            if (eventCount < 0) {
                 throw new Exception();
             }
         } catch (NumberFormatException e) {
-            eventCount = 1; // Since we can only have positive integer only, so the default value is 1
+            eventCount = 0; // Since we can only have positive integer only, so the default value is 1
         } catch (Exception e) {
             toastFillingError();
             return;
@@ -106,50 +121,55 @@ public class NewEventCategoryActivity extends AppCompatActivity {
          * */
         @Override
         public void onReceive(Context context, Intent intent) {
-            //context is used to interact with the Android system to send broadcasts, start activities, services, etc., within the current environment or application state.
-            /*
-             * Retrieve the message from the intent
-             * */
-            String msg = intent.getStringExtra(SMSReceiver.SMS_MSG_KEY);
-            /*
-             * String Tokenizer is used to parse the incoming message
-             * The protocol is to have the account holder name and account number separate by a semicolon
-             * */
-
-            StringTokenizer sT = new StringTokenizer(msg, ";");
-
-            String categoryName;
-            int eventCount;
-            boolean isActiveStr;
-            // here I use int and boolean here is because it can check the token type
-            // if the token can't be converted to be a specific type that it should be
-            // that means the message is not valid
-            // it will catch the error and toast
-            try {
-                String categoryToken = sT.nextToken(); // "category:Melbourne"
-                String[] categoryParts = categoryToken.split(":"); // Split by colon
-
-                // Remove "category:" as we just need "Melbourne"
-                if("category".equals(categoryParts[0]) && categoryParts[1].length() > 0) {
-                    categoryName = categoryParts[1];
-                } else{
-                    throw new Exception();
-                }
-
-                eventCount = Integer.parseInt(sT.nextToken());
-                //check if it is a valid true or false (case-insensitive)
-                isActiveStr = Utils.stringToBooleanOrNull(sT.nextToken());
-
+            if (isActive) {
+                //context is used to interact with the Android system to send broadcasts, start activities, services, etc., within the current environment or application state.
                 /*
-                 * Now, its time to update the UI
+                 * Retrieve the message from the intent
                  * */
-                categoryNameText.setText(categoryName);
-                eventCountText.setText(String.valueOf(eventCount));
-                isActiveSwitch.setChecked(isActiveStr);
+                String msg = intent.getStringExtra(SMSReceiver.SMS_MSG_KEY);
+                /*
+                 * String Tokenizer is used to parse the incoming message
+                 * The protocol is to have the account holder name and account number separate by a semicolon
+                 * */
 
-            } catch (Exception e) {
-                // catch all the possible error that would happen on try block
-                toastFillingError();
+                StringTokenizer sT = new StringTokenizer(msg, ";");
+
+                String categoryName;
+                int eventCount;
+                boolean isActiveStr;
+                // here I use int and boolean here is because it can check the token type
+                // if the token can't be converted to be a specific type that it should be
+                // that means the message is not valid
+                // it will catch the error and toast
+                try {
+                    String categoryToken = sT.nextToken(); // "category:Melbourne"
+                    String[] categoryParts = categoryToken.split(":"); // Split by colon
+
+                    // Remove "category:" as we just need "Melbourne"
+                    if ("category".equals(categoryParts[0]) && categoryParts[1].length() > 0) {
+                        categoryName = categoryParts[1];
+                    } else {
+                        throw new Exception();
+                    }
+
+                    eventCount = Integer.parseInt(sT.nextToken());
+                    if (eventCount < 0) {
+                        throw new Exception();
+                    }
+
+                    //check if it is a valid true or false (case-insensitive)
+                    isActiveStr = Utils.stringToBooleanOrNull(sT.nextToken());
+
+                    /*
+                     * Now, its time to update the UI
+                     * */
+                    categoryNameText.setText(categoryName);
+                    eventCountText.setText(String.valueOf(eventCount));
+                    isActiveSwitch.setChecked(isActiveStr);
+                } catch (Exception e) {
+                    // catch all the possible error that would happen on try block
+                    toastFillingError();
+                }
             }
         }
     }
