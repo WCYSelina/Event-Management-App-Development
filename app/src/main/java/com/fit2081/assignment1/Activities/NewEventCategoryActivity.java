@@ -105,6 +105,7 @@ public class NewEventCategoryActivity extends AppCompatActivity {
 
             Utils.storingCategories(eventCategories, getApplicationContext());
             Toast.makeText(this, "Category saved successfully: " + categoryId, Toast.LENGTH_LONG).show();
+            finish();
         } else {
             toastFillingError();
         }
