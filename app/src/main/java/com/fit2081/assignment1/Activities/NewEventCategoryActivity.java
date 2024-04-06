@@ -85,12 +85,12 @@ public class NewEventCategoryActivity extends AppCompatActivity {
         try {
             eventCount = Integer.parseInt(eventCountText.getText().toString());
             if (eventCount < 0) {
-                throw new Exception();
+                throw new Exception("Invalid Event Count");
             }
         } catch (NumberFormatException e) {
             eventCount = 0; // Since we can only have positive integer only, so the default value is 1
         } catch (Exception e) {
-            toastFillingError();
+            toastFillingError(e.getMessage());
             return;
         }
         boolean isActive = isActiveSwitch.isChecked();
@@ -98,21 +98,20 @@ public class NewEventCategoryActivity extends AppCompatActivity {
 
         //generate id
         String categoryId = Utils.generateCategoryId();
-
-        if(categoryName.length() > 0) {
-            EventCategory eventCategory = new EventCategory(categoryId, categoryName, eventCount, isActive);
-            eventCategories.add(eventCategory);
-
-            Utils.storingCategories(eventCategories, getApplicationContext());
-            Toast.makeText(this, "Category saved successfully: " + categoryId, Toast.LENGTH_LONG).show();
-            finish();
-        } else {
-            toastFillingError();
+        if (!categoryName.matches("[A-Za-z0-9]*[A-Za-z]+[A-Za-z0-9]*")) {
+            toastFillingError("Invalid category name");
+            return;
         }
+        EventCategory eventCategory = new EventCategory(categoryId, categoryName, eventCount, isActive);
+        eventCategories.add(eventCategory);
+
+        Utils.storingCategories(eventCategories, getApplicationContext());
+        Toast.makeText(this, "Category saved successfully: " + categoryId, Toast.LENGTH_LONG).show();
+        finish();
     }
 
-    public void toastFillingError() {
-        Toast.makeText(this, "Error: Missing parameters or invalid values.", Toast.LENGTH_LONG).show();
+    public void toastFillingError(String strError) {
+        Toast.makeText(this, strError, Toast.LENGTH_LONG).show();
     }
 
     class MyBroadCastReceiver extends BroadcastReceiver {
@@ -169,7 +168,7 @@ public class NewEventCategoryActivity extends AppCompatActivity {
                     isActiveSwitch.setChecked(isActiveStr);
                 } catch (Exception e) {
                     // catch all the possible error that would happen on try block
-                    toastFillingError();
+                    toastFillingError("Error: missing parameters or invalid values");
                 }
             }
         }

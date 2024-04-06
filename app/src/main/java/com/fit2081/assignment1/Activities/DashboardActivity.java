@@ -259,7 +259,7 @@ public class DashboardActivity extends AppCompatActivity {
                     if ("event".equals(eventParts[0]) && checkValidCategoryID(categoryIdRef)) {
                         eventName = eventParts[1];
                     } else {
-                        throw new Exception("h");
+                        throw new Exception("Error: missing parameters or invalid values");
                     }
                     /*
                      * Now, its time to update the UI
@@ -270,7 +270,6 @@ public class DashboardActivity extends AppCompatActivity {
                     isActiveSwitch.setChecked(isActiveStr);
 
                 } catch (Exception e) {
-                    System.out.println("2");
                     // this catch all the error that will occur in try block
                     toastFillingError(e.getMessage());
                 }
@@ -321,7 +320,7 @@ public class DashboardActivity extends AppCompatActivity {
             return false;
         }
 
-        if (!eventName.matches("[A-Za-z0-9 ]+") && !eventName.matches("[A-Za-z ]+")) {
+        if (!eventName.matches("[A-Za-z0-9]*[A-Za-z]+[A-Za-z0-9]*")) {
             toastFillingError("Invalid event name");
             return false;
         }
