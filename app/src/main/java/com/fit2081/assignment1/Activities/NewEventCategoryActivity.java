@@ -77,7 +77,7 @@ public class NewEventCategoryActivity extends AppCompatActivity {
 
     public void onSaveCategoryClick(View view) {
         // get the list of the categories has been saved previously
-        List<EventCategory> eventCategories = Utils.retrievedCategoriesFromSP(getApplicationContext());
+        List<EventCategory> eventCategories = Utils.retrievedCategoriesFromSP(NewEventCategoryActivity.this);
 
         String categoryName = categoryNameText.getText().toString();
         int eventCount;
@@ -105,7 +105,7 @@ public class NewEventCategoryActivity extends AppCompatActivity {
         EventCategory eventCategory = new EventCategory(categoryId, categoryName, eventCount, isActive);
         eventCategories.add(eventCategory);
 
-        Utils.storingCategories(eventCategories, getApplicationContext());
+        Utils.storingCategories(eventCategories, NewEventCategoryActivity.this);
         Toast.makeText(this, "Category saved successfully: " + categoryId, Toast.LENGTH_LONG).show();
         finish();
     }

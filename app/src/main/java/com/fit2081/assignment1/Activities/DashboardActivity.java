@@ -205,16 +205,16 @@ public class DashboardActivity extends AppCompatActivity {
         }
         else if (id == R.id.delete_categories) {
             // Do something
-            Utils.storingCategories(new ArrayList<>(), getApplicationContext());
+            Utils.storingCategories(new ArrayList<>(), DashboardActivity.this);
         }
         else if (id == R.id.delete_events) {
             // Do something
-            Utils.storingEvents(new ArrayList<>(), getApplicationContext());
-            List<EventCategory> eventCategories = Utils.retrievedCategoriesFromSP(getApplicationContext());
+            Utils.storingEvents(new ArrayList<>(), DashboardActivity.this);
+            List<EventCategory> eventCategories = Utils.retrievedCategoriesFromSP(DashboardActivity.this);
             for (int i = 0; i < eventCategories.size(); i++) {
                 eventCategories.get(i).resetEventCount();
             }
-            Utils.storingCategories(eventCategories, getApplicationContext());
+            Utils.storingCategories(eventCategories, DashboardActivity.this);
         }
         // tell the OS
         return true;
@@ -294,7 +294,7 @@ public class DashboardActivity extends AppCompatActivity {
 
     public boolean onSaveEventClick(View view) {
         // get the list of the categories has been saved previously
-        List<Event> events = Utils.retrievedEventsFromSP(getApplicationContext());
+        List<Event> events = Utils.retrievedEventsFromSP(DashboardActivity.this);
 
         //generate event ID
         String eventID = Utils.generateEventId();
@@ -324,15 +324,15 @@ public class DashboardActivity extends AppCompatActivity {
             toastFillingError("Invalid event name");
             return false;
         }
-        List<EventCategory> eventCategories = Utils.retrievedCategoriesFromSP(getApplicationContext());
+        List<EventCategory> eventCategories = Utils.retrievedCategoriesFromSP(DashboardActivity.this);
         for (int i = 0; i < eventCategories.size(); i++) {
             EventCategory category = eventCategories.get(i);
             if (category.getCategoryID().equals(categoryIdRef)) {
                 category.addEventCount();
-                Utils.storingCategories(eventCategories, getApplicationContext());
+                Utils.storingCategories(eventCategories, DashboardActivity.this);
                 latestSavedEvent = new Event(eventID, categoryIdRef, eventName, ticketsAvailable, isActive);
                 events.add(latestSavedEvent);
-                Utils.storingEvents(events, getApplicationContext());
+                Utils.storingEvents(events, DashboardActivity.this);
                 Toast.makeText(this, "Category saved successfully: " + eventID + " to " + categoryIdRef, Toast.LENGTH_LONG).show();
                 return true;
             }
