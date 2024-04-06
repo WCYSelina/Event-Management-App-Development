@@ -31,10 +31,6 @@ import com.fit2081.assignment1.Utils;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -172,10 +168,11 @@ public class DashboardActivity extends AppCompatActivity {
         }
         else if (id == R.id.delete_categories) {
             // Do something
+            Utils.storingCategories(new ArrayList<>(), getApplicationContext());
         }
         else if (id == R.id.delete_events) {
             // Do something
-            storingEvents(new ArrayList<>());
+            Utils.storingEvents(new ArrayList<>(), getApplicationContext());
         }
         // tell the OS
         return true;
@@ -281,26 +278,12 @@ public class DashboardActivity extends AppCompatActivity {
             Event event = new Event(eventID, categoryIdRef, eventName, ticketsAvailable, isActive);
             events.add(event);
 
-            storingEvents(events);
+            Utils.storingEvents(events, getApplicationContext());
             Toast.makeText(this, "Category saved successfully: " + eventID + " to " + categoryIdRef, Toast.LENGTH_LONG).show();
         } else {
             toastFillingError();
         }
     }
-
-    public void storingEvents(List<Event> events) {
-        SharedPreferences sharedPreferences = getSharedPreferences(Keys.EVENT_SP, MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-
-        // Create Gson object
-        Gson gson = new Gson();
-        // Convert the list of users to JSON format
-        String json = gson.toJson(events);
-        // Store the JSON string in SharedPreferences
-        editor.putString(Keys.ALL_EVENT, json);
-        editor.apply();
-    }
-
 
     public void toastFillingError() {
         Toast.makeText(this, "Error: Missing parameters or invalid values.", Toast.LENGTH_LONG).show();

@@ -96,4 +96,29 @@ public class Utils {
         }
         return events;
     }
+
+    public static void storingEvents(List<Event> events, Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(Keys.EVENT_SP, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        // Create Gson object
+        Gson gson = new Gson();
+        // Convert the list of users to JSON format
+        String json = gson.toJson(events);
+        // Store the JSON string in SharedPreferences
+        editor.putString(Keys.ALL_EVENT, json);
+        editor.apply();
+    }
+
+    public static void storingCategories(List<EventCategory> eventCategories, Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(Keys.CATEGORY_SP, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        // Create Gson object
+        Gson gson = new Gson();
+        // Convert the list of users to JSON format
+        String json = gson.toJson(eventCategories);
+        // Store the JSON string in SharedPreferences
+        editor.putString(Keys.ALL_CATEGORIES, json);
+        editor.apply();
+    }
 }

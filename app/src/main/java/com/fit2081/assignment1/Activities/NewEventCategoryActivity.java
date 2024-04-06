@@ -84,20 +84,11 @@ public class NewEventCategoryActivity extends AppCompatActivity {
         //generate id
         String categoryId = Utils.generateCategoryId();
 
-        SharedPreferences sharedPreferences = getSharedPreferences(Keys.CATEGORY_SP, MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-
         if(categoryName.length() > 0) {
             EventCategory eventCategory = new EventCategory(categoryId, categoryName, eventCount, isActive);
             eventCategories.add(eventCategory);
 
-            // Create Gson object
-            Gson gson = new Gson();
-            // Convert the list of users to JSON format
-            String json = gson.toJson(eventCategories);
-            // Store the JSON string in SharedPreferences
-            editor.putString(Keys.ALL_CATEGORIES, json);
-            editor.apply();
+            Utils.storingCategories(eventCategories, getApplicationContext());
             Toast.makeText(this, "Category saved successfully: " + categoryId, Toast.LENGTH_LONG).show();
         } else {
             toastFillingError();
