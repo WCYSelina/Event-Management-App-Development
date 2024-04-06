@@ -39,7 +39,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder>{
         holder.categoryId.setText(event.getCategoryID());
         holder.eventName.setText(event.getEventName());
         holder.ticketAvailable.setText(String.valueOf(event.getTicketAvailable()));
-        holder.isActive.setText(String.valueOf(event.isActive()));
+        holder.isActive.setText(event.isActive() ? "Active" : "Inactive");
 //        Log.d("week6App","onBindViewHolder");
 
     }

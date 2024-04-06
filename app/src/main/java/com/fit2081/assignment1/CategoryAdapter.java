@@ -37,7 +37,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         holder.categoryId.setText(category.getCategoryID());
         holder.categoryName.setText(category.getCategoryName());
         holder.eventCount.setText(String.valueOf(category.getEventCount()));
-        holder.isActive.setText(String.valueOf(category.isActive()));
+        holder.isActive.setText(category.isActive() ? "Active" : "Inactive");
 //        Log.d("week6App","onBindViewHolder");
 
     }
@@ -55,10 +55,10 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            categoryId = itemView.findViewById(R.id.categoryID);
-            categoryName = itemView.findViewById(R.id.categoryName);
-            eventCount = itemView.findViewById(R.id.eventCount);
-            isActive = itemView.findViewById(R.id.isActive);
+            categoryId = itemView.findViewById(R.id.displayCategoryID);
+            categoryName = itemView.findViewById(R.id.displayCategoryName);
+            eventCount = itemView.findViewById(R.id.displayEventCount);
+            isActive = itemView.findViewById(R.id.displayEventIsActive);
         }
     }
 }

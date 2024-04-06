@@ -320,7 +320,7 @@ public class DashboardActivity extends AppCompatActivity {
             return false;
         }
 
-        if (!eventName.matches("[A-Za-z0-9]*[A-Za-z]+[A-Za-z0-9]*")) {
+        if (!eventName.matches("[A-Za-z0-9 ]*[A-Za-z]+[A-Za-z0-9 ]*")) {
             toastFillingError("Invalid event name");
             return false;
         }

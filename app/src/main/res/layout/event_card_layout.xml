@@ -4,76 +4,95 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
-    app:cardBackgroundColor="#69AD5E"
-    app:cardCornerRadius="10dp"
-    app:cardElevation="4dp">
+    app:cardCornerRadius="8dp"
+    app:cardElevation="4dp"
+    app:cardBackgroundColor="#4CAF50">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="8dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
             android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3"
+                android:text="Id:"
+                android:textStyle="bold"
+                android:textColor="#FFFFFF" />
 
             <TextView
                 android:id="@+id/displayEventID"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="#FFFFFF" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="0.5"
-                android:text="Id  ELM-56193"
-                android:textColor="#FFFFFF"
-                android:textSize="16sp" />
+                android:text="Name:"
+                android:textStyle="bold"
+                android:textColor="#FFFFFF" />
 
             <TextView
                 android:id="@+id/displayEventName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Name  WorldCup"
-                android:textColor="#FFFFFF"
-                android:textSize="16sp" />
-
+                android:layout_weight="2"
+                android:textColor="#FFFFFF" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
             android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="25dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.3"
+                android:text="Category Id:"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/displayCategoryIDRef"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="CategoryId  CZU-5038"
-                android:textColor="#FFFFFF"
-                android:textSize="16sp" />
+                android:layout_weight="2"
+                android:textColor="#FFFFFF" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.2"
+                android:text="Tickets:"
+                android:textStyle="bold"
+                android:textColor="#FFFFFF" />
 
             <TextView
                 android:id="@+id/displayTicketAvailable"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:gravity="center"
-                android:text="Tickets  60"
-                android:textColor="#FFFFFF"
-                android:textSize="16sp" />
+                android:textColor="#FFFFFF" />
 
             <TextView
                 android:id="@+id/displayIsActive"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Active"
-                android:textColor="#FFFFFF"
-                android:textSize="16sp" />
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:textStyle="bold"
+                android:textColor="#FFFFFF" />
         </LinearLayout>
-
     </LinearLayout>
-
 </androidx.cardview.widget.CardView>

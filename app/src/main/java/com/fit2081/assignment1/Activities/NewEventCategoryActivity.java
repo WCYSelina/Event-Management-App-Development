@@ -98,7 +98,7 @@ public class NewEventCategoryActivity extends AppCompatActivity {
 
         //generate id
         String categoryId = Utils.generateCategoryId();
-        if (!categoryName.matches("[A-Za-z0-9]*[A-Za-z]+[A-Za-z0-9]*")) {
+        if (!categoryName.matches("[A-Za-z0-9 ]*[A-Za-z]+[A-Za-z0-9 ]*")) {
             toastFillingError("Invalid category name");
             return;
         }
