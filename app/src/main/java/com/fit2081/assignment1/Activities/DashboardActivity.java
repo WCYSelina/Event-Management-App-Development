@@ -177,7 +177,6 @@ public class DashboardActivity extends AppCompatActivity {
 
     public void onLogOutClick() {
         Intent intent = new Intent(this, LoginActivity.class);
-        // Set the FLAG_ACTIVITY_NEW_TASK and FLAG_ACTIVITY_CLEAR_TASK flags.
         // FLAG_ACTIVITY_NEW_TASK is used when launching an Activity from a non-Activity context.
         // FLAG_ACTIVITY_CLEAR_TASK will cause any existing task that would be associated with the activity to be cleared before the activity is started.
         // Together they clear the current task and start a new task with LoginActivity as the root.

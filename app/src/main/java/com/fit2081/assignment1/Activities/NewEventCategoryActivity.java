@@ -90,7 +90,7 @@ public class NewEventCategoryActivity extends AppCompatActivity {
 
         //generate id
         String categoryId = Utils.generateCategoryId();
-        categoryIDText.setText(categoryId);
+
         // check the category name is valid or not
         if (!categoryName.matches("[A-Za-z0-9 ]*[A-Za-z]+[A-Za-z0-9 ]*")) {
             toastFillingError("Invalid category name");
@@ -100,6 +100,7 @@ public class NewEventCategoryActivity extends AppCompatActivity {
         eventCategories.add(eventCategory);
 
         Utils.storingCategories(eventCategories, NewEventCategoryActivity.this);
+        categoryIDText.setText(categoryId);
         Toast.makeText(this, "Category saved successfully: " + categoryId, Toast.LENGTH_LONG).show();
         finish();
     }
