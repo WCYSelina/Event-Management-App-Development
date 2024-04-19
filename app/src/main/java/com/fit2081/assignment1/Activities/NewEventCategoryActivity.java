@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 public class NewEventCategoryActivity extends AppCompatActivity {
+    EditText categoryIDText;
     EditText categoryNameText;
     EditText eventCountText;
     Switch isActiveSwitch;
@@ -37,10 +38,11 @@ public class NewEventCategoryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_event_category);
-
+        categoryIDText = findViewById(R.id.categoryID);
         categoryNameText = findViewById(R.id.categoryName);
         eventCountText = findViewById(R.id.eventCount);
         isActiveSwitch = findViewById(R.id.isActive);
+
 
         /* Request permissions to access SMS */
         ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.SEND_SMS, android.Manifest.permission.RECEIVE_SMS, Manifest.permission.READ_SMS}, 0);
@@ -88,6 +90,7 @@ public class NewEventCategoryActivity extends AppCompatActivity {
 
         //generate id
         String categoryId = Utils.generateCategoryId();
+        categoryIDText.setText(categoryId);
         // check the category name is valid or not
         if (!categoryName.matches("[A-Za-z0-9 ]*[A-Za-z]+[A-Za-z0-9 ]*")) {
             toastFillingError("Invalid category name");

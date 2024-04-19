@@ -347,6 +347,7 @@ public class DashboardActivity extends AppCompatActivity {
                 latestSavedEvent = new Event(eventID, categoryIdRef, eventName, ticketsAvailable, isActive);
                 events.add(latestSavedEvent);
                 Utils.storingEvents(events, DashboardActivity.this);
+                eventIDText.setText(eventID);
                 Toast.makeText(this, "Category saved successfully: " + eventID + " to " + categoryIdRef, Toast.LENGTH_LONG).show();
                 return true;
             }
