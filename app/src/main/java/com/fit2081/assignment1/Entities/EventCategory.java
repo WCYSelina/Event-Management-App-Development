@@ -21,10 +21,6 @@ public class EventCategory {
         return categoryName;
     }
 
-    public void setCategoryName(String categoryName) {
-        this.categoryName = categoryName;
-    }
-
     public int getEventCount() {
         return eventCount;
     }
@@ -36,13 +32,12 @@ public class EventCategory {
     public void addEventCount() {
         this.eventCount += 1;
     }
+    public void eventCountDecrement() { this.eventCount -= 1; }
+
 
     public boolean isActive() {
         return isActive;
     }
 
-    public void setActive(boolean active) {
-        isActive = active;
-    }
 
 }

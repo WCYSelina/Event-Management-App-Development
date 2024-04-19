@@ -52,13 +52,18 @@ public class DashboardActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // change this to drawer_layout for navigation drawer purpose
+        // the activity_dashboard itself is inlcuded in the drawer_layout.xml
         setContentView(R.layout.drawer_layout);
 
         drawerLayout = findViewById(R.id.drawer_layout);
         Toolbar toolbar = findViewById(R.id.toolbar);
 
+        // to replace our designated toolbar with default toolbar
         setSupportActionBar(toolbar);
 
+        // set the navigation drawer to the toolbar
+        // listen to open and close the icon
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
@@ -79,20 +84,14 @@ public class DashboardActivity extends AppCompatActivity {
          * */
         registerReceiver(myBroadCastReceiver, new IntentFilter(SMSReceiver.SMS_FILTER),RECEIVER_EXPORTED);
 
-        NavigationView navigationView = findViewById(R.id.nav_view); // The ID of your NavigationView component
+        // set the listener for navigation view
+        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(new MyNavigationListener());
 
-        // Create an instance of FragmentListCategory
-        FragmentListCategory firstFragment = new FragmentListCategory();
+        // get the current activity's fragment manager and start the transaction
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_list_category, new FragmentListCategory()).commit();
 
-        // In case this activity was started with special instructions from an Intent,
-        // pass the Intent's extras to the fragment as arguments
-        firstFragment.setArguments(getIntent().getExtras());
-
-        // Add the fragment to the 'fragment_container' FrameLayout
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.fragment_list_category, firstFragment).commit();
-
+        // fab button, able to undo the the saved event data
         fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -118,6 +117,7 @@ public class DashboardActivity extends AppCompatActivity {
         // Start reading messages specific to MainActivity
     }
 
+    // so that when it navigate to add catogory activity, the add event in the dashboard activty won't listen to it
     @Override
     protected void onPause() {
         super.onPause();
@@ -125,15 +125,25 @@ public class DashboardActivity extends AppCompatActivity {
         // Stop reading messages or ignore incoming ones
     }
 
+    // undo the last saving event by clicking the undo in the fab button
+    // decrement the corresponding category's event count
     public void undoSavingEvent() {
-        List<Event> events = Utils.retrievedEventsFromSP(getApplicationContext());
+        List<Event> events = Utils.retrievedEventsFromSP(DashboardActivity.this);
+        List<EventCategory> categories = Utils.retrievedCategoriesFromSP(DashboardActivity.this);
+        String categoryID = this.latestSavedEvent.getCategoryID();
         for (int i = 0; i < events.size(); i++) {
             // find the event that is to be undone
             if (events.get(i).getEventID().equals(this.latestSavedEvent.getEventID())) {
-                events.remove(i);
+                events.remove(i); // only remove the latest one
             }
         }
-        Utils.storingEvents(events, getApplicationContext());
+        for (int i = 0; i < categories.size(); i++) {
+            if (categories.get(i).getCategoryID().equals(categoryID)){
+                categories.get(i).eventCountDecrement();
+            }
+        }
+        Utils.storingCategories(categories, DashboardActivity.this);
+        Utils.storingEvents(events, DashboardActivity.this);
     }
 
     class MyNavigationListener implements NavigationView.OnNavigationItemSelectedListener {
@@ -162,7 +172,6 @@ public class DashboardActivity extends AppCompatActivity {
             }
             // close the drawer
             drawerLayout.closeDrawers();
-            // tell the OS
             return true;
         }
     }
@@ -177,6 +186,7 @@ public class DashboardActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    // inflate the options menu to the activty
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.options_menu, menu);
@@ -188,7 +198,7 @@ public class DashboardActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.refresh) {
-            // Obtain the fragment and call a method to refresh data
+            // Obtain the fragment and refresh data
             Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_list_category);
             if (currentFragment instanceof FragmentListCategory) {
                 ((FragmentListCategory) currentFragment).updateCategoriesList();
@@ -196,7 +206,6 @@ public class DashboardActivity extends AppCompatActivity {
             return true;
 
         } else if (id == R.id.clear_event) {
-            // Do something
             eventIDText.setText("");
             eventNameText.setText("");
             categoryIdRefText.setText("");
@@ -204,12 +213,12 @@ public class DashboardActivity extends AppCompatActivity {
             isActiveSwitch.setChecked(false);
         }
         else if (id == R.id.delete_categories) {
-            // Do something
             Utils.storingCategories(new ArrayList<>(), DashboardActivity.this);
         }
         else if (id == R.id.delete_events) {
-            // Do something
+            // first delete all the events
             Utils.storingEvents(new ArrayList<>(), DashboardActivity.this);
+            // then reset the event counts for all the activity
             List<EventCategory> eventCategories = Utils.retrievedCategoriesFromSP(DashboardActivity.this);
             for (int i = 0; i < eventCategories.size(); i++) {
                 eventCategories.get(i).resetEventCount();
@@ -252,6 +261,10 @@ public class DashboardActivity extends AppCompatActivity {
                     categoryIdRef = sT.nextToken();
                     ticketsAvailable = Integer.parseInt(sT.nextToken());
 
+                    if (ticketsAvailable < 0) {
+                        throw new Exception();
+                    }
+
                     //check if it is a valid true or false (case-insensitive)
                     isActiveStr = Utils.stringToBooleanOrNull(sT.nextToken());
 
@@ -259,7 +272,7 @@ public class DashboardActivity extends AppCompatActivity {
                     if ("event".equals(eventParts[0]) && checkValidCategoryID(categoryIdRef)) {
                         eventName = eventParts[1];
                     } else {
-                        throw new Exception("Error: missing parameters or invalid values");
+                        throw new Exception();
                     }
                     /*
                      * Now, its time to update the UI
@@ -270,13 +283,14 @@ public class DashboardActivity extends AppCompatActivity {
                     isActiveSwitch.setChecked(isActiveStr);
 
                 } catch (Exception e) {
-                    // this catch all the error that will occur in try block
-                    toastFillingError(e.getMessage());
+                    toastFillingError("Error: missing parameters or invalid values");
                 }
             }
         }
     }
 
+
+    // used for checking the incoming message's category id's format
     public boolean checkValidCategoryID(String categoryID) {
         if(categoryID.length() == 7) {
             return false;
@@ -302,21 +316,20 @@ public class DashboardActivity extends AppCompatActivity {
         String categoryIdRef = categoryIdRefText.getText().toString();
 
         boolean isActive = isActiveSwitch.isChecked();
-        String isActiveStr = Boolean.toString(isActive);
 
 
         int ticketsAvailable;
         try {
+            // check the data type
             ticketsAvailable = Integer.parseInt(ticketAvailableText.getText().toString());
             if (ticketsAvailable < 0) {
                 throw new Exception("Invalid 'Tickets available'");
             }
 
-        }  catch (NumberFormatException e) {
-            ticketsAvailable = 0;
-        }
-        catch (Exception e) {
-            toastFillingError(e.getMessage());
+        } catch (NumberFormatException e) {
+            ticketsAvailable = 0; //default ticket available number
+        } catch (Exception e) {
+            toastFillingError("Invalid 'Tickets available'");
             return false;
         }
 
@@ -324,12 +337,14 @@ public class DashboardActivity extends AppCompatActivity {
             toastFillingError("Invalid event name");
             return false;
         }
+        // after check all the validity of the event, save the event and update the corresponding category's event count
         List<EventCategory> eventCategories = Utils.retrievedCategoriesFromSP(DashboardActivity.this);
         for (int i = 0; i < eventCategories.size(); i++) {
             EventCategory category = eventCategories.get(i);
             if (category.getCategoryID().equals(categoryIdRef)) {
                 category.addEventCount();
                 Utils.storingCategories(eventCategories, DashboardActivity.this);
+                // save the record of the lastest saved event for the purpose of undoing
                 latestSavedEvent = new Event(eventID, categoryIdRef, eventName, ticketsAvailable, isActive);
                 events.add(latestSavedEvent);
                 Utils.storingEvents(events, DashboardActivity.this);

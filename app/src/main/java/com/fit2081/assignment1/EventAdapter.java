@@ -28,7 +28,6 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder>{
     public EventAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.event_card_layout, parent, false); //CardView inflated as RecyclerView list item
         EventAdapter.ViewHolder viewHolder = new EventAdapter.ViewHolder(v);
-//        Log.d("week6App","onCreateViewHolder");
         return viewHolder;
     }
 
@@ -40,7 +39,6 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder>{
         holder.eventName.setText(event.getEventName());
         holder.ticketAvailable.setText(String.valueOf(event.getTicketAvailable()));
         holder.isActive.setText(event.isActive() ? "Active" : "Inactive");
-//        Log.d("week6App","onBindViewHolder");
 
     }
 

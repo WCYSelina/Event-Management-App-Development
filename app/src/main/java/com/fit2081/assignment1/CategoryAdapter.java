@@ -27,7 +27,6 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.category_card_layout, parent, false); //CardView inflated as RecyclerView list item
         ViewHolder viewHolder = new ViewHolder(v);
-//        Log.d("week6App","onCreateViewHolder");
         return viewHolder;
     }
 
@@ -38,7 +37,6 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         holder.categoryName.setText(category.getCategoryName());
         holder.eventCount.setText(String.valueOf(category.getEventCount()));
         holder.isActive.setText(category.isActive() ? "Active" : "Inactive");
-//        Log.d("week6App","onBindViewHolder");
 
     }
 

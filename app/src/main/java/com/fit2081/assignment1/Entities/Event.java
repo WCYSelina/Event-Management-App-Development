@@ -23,10 +23,6 @@ public class Event {
         return categoryID;
     }
 
-    public void setCategoryID(String categoryID) {
-        this.categoryID = categoryID;
-    }
-
     public String getEventName() {
         return eventName;
     }

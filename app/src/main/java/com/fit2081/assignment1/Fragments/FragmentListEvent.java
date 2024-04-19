@@ -21,47 +21,10 @@ import com.fit2081.assignment1.Keys;
 import com.fit2081.assignment1.R;
 import com.fit2081.assignment1.Utils;
 import java.util.List;
-
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link FragmentListEvent#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class FragmentListEvent extends Fragment {
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
     private RecyclerView recyclerView;
     private EventAdapter adapter;
     private List<Event> events;
-
-    public FragmentListEvent() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment FragmentListEvent.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static FragmentListEvent newInstance(String param1, String param2) {
-        FragmentListEvent fragment = new FragmentListEvent();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
