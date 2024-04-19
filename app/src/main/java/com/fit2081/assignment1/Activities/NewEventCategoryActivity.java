@@ -45,18 +45,7 @@ public class NewEventCategoryActivity extends AppCompatActivity {
         /* Request permissions to access SMS */
         ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.SEND_SMS, android.Manifest.permission.RECEIVE_SMS, Manifest.permission.READ_SMS}, 0);
         MyBroadCastReceiver myBroadCastReceiver = new MyBroadCastReceiver();
-        /*
-            Or register your SMSReciver class in the activity as shown below:
-         * Register the broadcast handler with the intent filter that is declared in
-         * class SMSReceiver @line 11
-         * */
-        /*
-        new IntentFilter(SMSReceiver.SMS_FILTER):
-        telling the system that your myBroadCastReceiver is interested in intents that match the action defined by
-        SMSReceiver.SMS_FILTER.
 
-        RECEIVER_EXPORTED meaning it is willing to receive intents from components outside its application
-        */
         registerReceiver(myBroadCastReceiver, new IntentFilter(SMSReceiver.SMS_FILTER),RECEIVER_EXPORTED);
 
     }
@@ -65,9 +54,10 @@ public class NewEventCategoryActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         isActive = true;
-        // Start reading messages specific to OtherActivity
+        // Start reading messages
     }
 
+    // so that when it navigate back to dashboard activity, so that the broadcast receiver wont messed up
     @Override
     protected void onPause() {
         super.onPause();
@@ -88,7 +78,7 @@ public class NewEventCategoryActivity extends AppCompatActivity {
                 throw new Exception("Invalid Event Count");
             }
         } catch (NumberFormatException e) {
-            eventCount = 0; // Since we can only have positive integer only, so the default value is 1
+            eventCount = 0; // default value
         } catch (Exception e) {
             toastFillingError(e.getMessage());
             return;
@@ -98,6 +88,7 @@ public class NewEventCategoryActivity extends AppCompatActivity {
 
         //generate id
         String categoryId = Utils.generateCategoryId();
+        // check the category name is valid or not
         if (!categoryName.matches("[A-Za-z0-9 ]*[A-Za-z]+[A-Za-z0-9 ]*")) {
             toastFillingError("Invalid category name");
             return;

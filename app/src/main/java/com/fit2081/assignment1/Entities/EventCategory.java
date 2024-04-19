@@ -33,8 +33,6 @@ public class EventCategory {
         this.eventCount += 1;
     }
     public void eventCountDecrement() { this.eventCount -= 1; }
-
-
     public boolean isActive() {
         return isActive;
     }

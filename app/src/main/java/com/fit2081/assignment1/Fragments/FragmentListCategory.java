@@ -21,7 +21,6 @@ import com.fit2081.assignment1.R;
 import com.fit2081.assignment1.Utils;
 import java.util.List;
 public class FragmentListCategory extends Fragment {
-    private NewEventCategoryActivity eventCategoryActivity;
     private RecyclerView recyclerView;
     private CategoryAdapter adapter;
     private List<EventCategory> categories;
@@ -29,8 +28,6 @@ public class FragmentListCategory extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-//        // Inflate the layout for this fragment
-//        return inflater.inflate(R.layout.fragment_list_category, container, false);
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_list_category, container, false);
         recyclerView = view.findViewById(R.id.recyclerViewCategories);
@@ -42,15 +39,13 @@ public class FragmentListCategory extends Fragment {
         adapter = new CategoryAdapter(categories);
         recyclerView.setAdapter(adapter);
 
-        // If your data changes later, call notifyDataSetChanged()
-        // For example, if you have a method that updates the categories, call it here
-        updateCategoriesList(); // This method internally calls notifyDataSetChanged()
+        updateCategoriesList();
         return view;
     }
 
     public void updateCategoriesList() {
         categories.clear();
-        categories.addAll(Utils.retrievedCategoriesFromSP(getContext())); // or however you update your data
+        categories.addAll(Utils.retrievedCategoriesFromSP(getContext()));
         adapter.notifyDataSetChanged(); // Notify the adapter to refresh the RecyclerView
     }
 }

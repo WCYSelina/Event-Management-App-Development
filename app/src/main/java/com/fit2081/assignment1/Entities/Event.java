@@ -27,23 +27,12 @@ public class Event {
         return eventName;
     }
 
-    public void setEventName(String eventName) {
-        this.eventName = eventName;
-    }
-
     public int getTicketAvailable() {
         return ticketAvailable;
-    }
-
-    public void setTicketAvailable(int ticketAvailable) {
-        this.ticketAvailable = ticketAvailable;
     }
 
     public boolean isActive() {
         return isActive;
     }
 
-    public void setActive(boolean active) {
-        isActive = active;
-    }
 }

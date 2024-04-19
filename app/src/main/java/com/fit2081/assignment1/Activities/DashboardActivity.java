@@ -8,7 +8,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -332,7 +331,7 @@ public class DashboardActivity extends AppCompatActivity {
             toastFillingError("Invalid 'Tickets available'");
             return false;
         }
-
+        // check the event name is valid or not
         if (!eventName.matches("[A-Za-z0-9 ]*[A-Za-z]+[A-Za-z0-9 ]*")) {
             toastFillingError("Invalid event name");
             return false;
