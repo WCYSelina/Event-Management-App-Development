@@ -21,13 +21,8 @@ public interface CategoryDAO {
     // Indicates that this method is used to insert data into the database.
     @Insert
     void addItem(EventCategory item); // Method signature for inserting an Item object into the database.
-
-    @Query("DELETE FROM eventCategories WHERE id = :id")
-    void deleteByID(int id);
-
-    @Transaction
-    default void deleteAndInsert(int id, EventCategory item){
-        deleteByID(id);
-        addItem(item);
-    }
+    @Query("UPDATE eventCategories SET eventCount = eventCount + 1 WHERE id = :id ")
+    void increamentEventCount(int id);
+    @Query("DELETE FROM eventCategories")
+    void deleteAllCategories();
 }

@@ -11,14 +11,17 @@ public class EventCategory {
     private int id;
     private String categoryID;
     private String categoryName;
+    @ColumnInfo(name = "eventCount")
     private int eventCount;
     private boolean isActive;
+    private String eventLocation;
 
-    public EventCategory(String categoryID, String categoryName, int eventCount, boolean isActive) {
+    public EventCategory(String categoryID, String categoryName, int eventCount, boolean isActive, String eventLocation) {
         this.categoryID = categoryID;
         this.categoryName = categoryName;
         this.eventCount = eventCount;
         this.isActive = isActive;
+        this.eventLocation = eventLocation;
     }
 
     public String getCategoryID() {
@@ -46,6 +49,11 @@ public class EventCategory {
     }
     public int getId() {return id;}
     public void setId(int id) {this.id = id;}
+    public String getEventLocation() {
+        return eventLocation;
+    }
 
-
+    public void setEventLocation(String eventLocation) {
+        this.eventLocation = eventLocation;
+    }
 }

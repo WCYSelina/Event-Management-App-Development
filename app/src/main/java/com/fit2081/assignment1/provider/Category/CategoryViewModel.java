@@ -50,7 +50,10 @@ public class CategoryViewModel extends AndroidViewModel {
     public void insert(List<EventCategory> category) {
         repository.insert(category);
     }
-    public void deleteAndInsert(int id, EventCategory category) {
-        repository.deleteAndInsert(id, category);
+    public void deleteAll() {
+        repository.deleteAll();
+    }
+    public void increamentEventCount(int id) {
+        repository.increamentEventCount(id);
     }
 }

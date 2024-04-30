@@ -39,13 +39,8 @@ public class FragmentListCategory extends Fragment {
     }
 
     public void updateCategoriesList() {
-//        categories.clear();
-//        categories.addAll(Utils.retrievedCategoriesFromSP(getContext()));
-//        adapter.notifyDataSetChanged(); // Notify the adapter to refresh the RecyclerView
         categoryViewModel.getAllCategory().observe(getViewLifecycleOwner(), newData -> {
-            // cast List<Item> to ArrayList<Item>
             categories = newData;
-            System.out.println(newData);
             adapter = new CategoryAdapter(newData);
             recyclerView.setAdapter(adapter);
             adapter.notifyDataSetChanged();

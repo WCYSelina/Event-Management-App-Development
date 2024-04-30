@@ -46,8 +46,12 @@ public class CategoryRepository {
             CategoryDatabase.databaseWriteExecutor.execute(() -> categoryDAO.addItem(category));
         }
     }
+    void deleteAll() {
+        // Executes the database operation to insert the item in a background thread.
+        CategoryDatabase.databaseWriteExecutor.execute(() -> categoryDAO.deleteAllCategories());
+    }
 
-    void deleteAndInsert(int id, EventCategory category){
-        CategoryDatabase.databaseWriteExecutor.execute(() -> categoryDAO.deleteAndInsert(id, category));
+    void increamentEventCount(int id) {
+        CategoryDatabase.databaseWriteExecutor.execute(() -> categoryDAO.increamentEventCount(id));
     }
 }

@@ -27,6 +27,7 @@ public class NewEventCategoryActivity extends AppCompatActivity {
     EditText categoryIDText;
     EditText categoryNameText;
     EditText eventCountText;
+    EditText eventLocationText;
     Switch isActiveSwitch;
     private boolean isActive = false;
     private CategoryViewModel categoryViewModel;
@@ -38,6 +39,8 @@ public class NewEventCategoryActivity extends AppCompatActivity {
         categoryNameText = findViewById(R.id.categoryName);
         eventCountText = findViewById(R.id.eventCount);
         isActiveSwitch = findViewById(R.id.isActive);
+        eventLocationText = findViewById(R.id.category_location_text);
+
 
         // initialise ViewModel
         categoryViewModel = new ViewModelProvider(this).get(CategoryViewModel.class);
@@ -72,7 +75,7 @@ public class NewEventCategoryActivity extends AppCompatActivity {
     public void onSaveCategoryClick(View view) {
         // get the list of the categories has been saved previously
 //        List<EventCategory> eventCategories = Utils.retrievedCategoriesFromSP(NewEventCategoryActivity.this);
-
+        String eventLocation = eventLocationText.getText().toString();
         String categoryName = categoryNameText.getText().toString();
         int eventCount;
 
@@ -98,7 +101,7 @@ public class NewEventCategoryActivity extends AppCompatActivity {
             toastFillingError("Invalid category name");
             return;
         }
-        EventCategory eventCategory = new EventCategory(categoryId, categoryName, eventCount, isActive);
+        EventCategory eventCategory = new EventCategory(categoryId, categoryName, eventCount, isActive, eventLocation);
 //        eventCategories.add(eventCategory);
         // database operation
         categoryViewModel.insert(eventCategory);

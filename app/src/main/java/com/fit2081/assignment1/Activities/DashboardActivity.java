@@ -221,7 +221,8 @@ public class DashboardActivity extends AppCompatActivity {
             ticketAvailableText.setText("");
             isActiveSwitch.setChecked(false);
         } else if (id == R.id.delete_categories) {
-            Utils.storingCategories(new ArrayList<>(), DashboardActivity.this);
+//            Utils.storingCategories(new ArrayList<>(), DashboardActivity.this);
+            categoryViewModel.deleteAll();
         } else if (id == R.id.delete_events) {
             // first delete all the events
             Utils.storingEvents(new ArrayList<>(), DashboardActivity.this);
@@ -351,7 +352,7 @@ public class DashboardActivity extends AppCompatActivity {
             EventCategory category = eventCategories.get(i);
             if (category.getCategoryID().equals(categoryIdRef)) {
                 category.addEventCount();
-                categoryViewModel.deleteAndInsert(category.getId(), category);
+                categoryViewModel.increamentEventCount(category.getId());
 //                Utils.storingCategories(eventCategories, DashboardActivity.this);
                 // save the record of the lastest saved event for the purpose of undoing
                 latestSavedEvent = new Event(eventID, categoryIdRef, eventName, ticketsAvailable, isActive);
