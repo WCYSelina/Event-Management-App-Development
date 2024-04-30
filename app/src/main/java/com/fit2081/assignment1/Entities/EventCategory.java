@@ -1,6 +1,14 @@
 package com.fit2081.assignment1.Entities;
 
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+@Entity(tableName = "eventCategories")
 public class EventCategory {
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "id")
+    private int id;
     private String categoryID;
     private String categoryName;
     private int eventCount;
@@ -36,6 +44,8 @@ public class EventCategory {
     public boolean isActive() {
         return isActive;
     }
+    public int getId() {return id;}
+    public void setId(int id) {this.id = id;}
 
 
 }

@@ -2,13 +2,13 @@ package com.fit2081.assignment1.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -16,16 +16,11 @@ import android.widget.Switch;
 import android.widget.Toast;
 
 import com.fit2081.assignment1.Entities.EventCategory;
-import com.fit2081.assignment1.Keys;
 import com.fit2081.assignment1.R;
 import com.fit2081.assignment1.SMSReceiver;
 import com.fit2081.assignment1.Utils;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+import com.fit2081.assignment1.provider.Category.CategoryViewModel;
 
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.StringTokenizer;
 
 public class NewEventCategoryActivity extends AppCompatActivity {
@@ -34,6 +29,7 @@ public class NewEventCategoryActivity extends AppCompatActivity {
     EditText eventCountText;
     Switch isActiveSwitch;
     private boolean isActive = false;
+    private CategoryViewModel categoryViewModel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +39,8 @@ public class NewEventCategoryActivity extends AppCompatActivity {
         eventCountText = findViewById(R.id.eventCount);
         isActiveSwitch = findViewById(R.id.isActive);
 
+        // initialise ViewModel
+        categoryViewModel = new ViewModelProvider(this).get(CategoryViewModel.class);
 
         /* Request permissions to access SMS */
         ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.SEND_SMS, android.Manifest.permission.RECEIVE_SMS, Manifest.permission.READ_SMS}, 0);
@@ -67,9 +65,13 @@ public class NewEventCategoryActivity extends AppCompatActivity {
         // Stop reading messages or ignore incoming ones
     }
 
+    public CategoryViewModel getCategoryViewModel() {
+        return categoryViewModel;
+    }
+
     public void onSaveCategoryClick(View view) {
         // get the list of the categories has been saved previously
-        List<EventCategory> eventCategories = Utils.retrievedCategoriesFromSP(NewEventCategoryActivity.this);
+//        List<EventCategory> eventCategories = Utils.retrievedCategoriesFromSP(NewEventCategoryActivity.this);
 
         String categoryName = categoryNameText.getText().toString();
         int eventCount;
@@ -97,9 +99,11 @@ public class NewEventCategoryActivity extends AppCompatActivity {
             return;
         }
         EventCategory eventCategory = new EventCategory(categoryId, categoryName, eventCount, isActive);
-        eventCategories.add(eventCategory);
+//        eventCategories.add(eventCategory);
+        // database operation
+        categoryViewModel.insert(eventCategory);
 
-        Utils.storingCategories(eventCategories, NewEventCategoryActivity.this);
+//        Utils.storingCategories(eventCategories, NewEventCategoryActivity.this);
         categoryIDText.setText(categoryId);
         Toast.makeText(this, "Category saved successfully: " + categoryId, Toast.LENGTH_LONG).show();
         finish();

@@ -21,21 +21,25 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.widget.Toolbar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+
 import com.fit2081.assignment1.Entities.Event;
 import com.fit2081.assignment1.Entities.EventCategory;
 import com.fit2081.assignment1.Fragments.FragmentListCategory;
-import com.fit2081.assignment1.Keys;
 import com.fit2081.assignment1.R;
 import com.fit2081.assignment1.SMSReceiver;
 import com.fit2081.assignment1.Utils;
+import com.fit2081.assignment1.provider.Category.CategoryViewModel;
+import com.fit2081.assignment1.provider.Event.EventViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.gson.Gson;
 
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class DashboardActivity extends AppCompatActivity {
 
@@ -48,12 +52,21 @@ public class DashboardActivity extends AppCompatActivity {
     FloatingActionButton fab;
     Event latestSavedEvent;
     private boolean isActive = false;
+    private EventViewModel eventViewModel;
+    private CategoryViewModel categoryViewModel;
+    private List<EventCategory> eventCategories;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // change this to drawer_layout for navigation drawer purpose
         // the activity_dashboard itself is inlcuded in the drawer_layout.xml
         setContentView(R.layout.drawer_layout);
+
+        // initialise ViewModel
+        eventViewModel = new ViewModelProvider(this).get(EventViewModel.class);
+        // initialise ViewModel
+        categoryViewModel = new ViewModelProvider(this).get(CategoryViewModel.class);
 
         drawerLayout = findViewById(R.id.drawer_layout);
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -78,18 +91,18 @@ public class DashboardActivity extends AppCompatActivity {
         ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.SEND_SMS, android.Manifest.permission.RECEIVE_SMS, Manifest.permission.READ_SMS}, 0);
         DashboardActivity.MyBroadCastReceiver myBroadCastReceiver = new DashboardActivity.MyBroadCastReceiver();
         /*
-         * Register the baroadcast handler with the intent filter that is declared in
+         * Register the broadcast handler with the intent filter that is declared in
          * class SMSReceiver @line 11
          * */
-        registerReceiver(myBroadCastReceiver, new IntentFilter(SMSReceiver.SMS_FILTER),RECEIVER_EXPORTED);
+        registerReceiver(myBroadCastReceiver, new IntentFilter(SMSReceiver.SMS_FILTER), RECEIVER_EXPORTED);
 
         // set the listener for navigation view
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(new MyNavigationListener());
 
         // get the current activity's fragment manager and start the transaction
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_list_category, new FragmentListCategory()).commit();
-
+        FragmentListCategory fragment = new FragmentListCategory();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_list_category, fragment).commit();
         // fab button, able to undo the the saved event data
         fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -137,7 +150,7 @@ public class DashboardActivity extends AppCompatActivity {
             }
         }
         for (int i = 0; i < categories.size(); i++) {
-            if (categories.get(i).getCategoryID().equals(categoryID)){
+            if (categories.get(i).getCategoryID().equals(categoryID)) {
                 categories.get(i).eventCountDecrement();
             }
         }
@@ -160,13 +173,11 @@ public class DashboardActivity extends AppCompatActivity {
                 // Do something
                 Intent intent = new Intent(DashboardActivity.this, NewEventCategoryActivity.class);
                 startActivity(intent);
-            }
-            else if (id == R.id.view_events) {
+            } else if (id == R.id.view_events) {
                 // Do something
                 Intent intent = new Intent(DashboardActivity.this, ListEventActivity.class);
                 startActivity(intent);
-            }
-            else if (id == R.id.log_out) {
+            } else if (id == R.id.log_out) {
                 onLogOutClick();
             }
             // close the drawer
@@ -209,11 +220,9 @@ public class DashboardActivity extends AppCompatActivity {
             categoryIdRefText.setText("");
             ticketAvailableText.setText("");
             isActiveSwitch.setChecked(false);
-        }
-        else if (id == R.id.delete_categories) {
+        } else if (id == R.id.delete_categories) {
             Utils.storingCategories(new ArrayList<>(), DashboardActivity.this);
-        }
-        else if (id == R.id.delete_events) {
+        } else if (id == R.id.delete_events) {
             // first delete all the events
             Utils.storingEvents(new ArrayList<>(), DashboardActivity.this);
             // then reset the event counts for all the activity
@@ -290,15 +299,15 @@ public class DashboardActivity extends AppCompatActivity {
 
     // used for checking the incoming message's category id's format
     public boolean checkValidCategoryID(String categoryID) {
-        if(categoryID.length() == 7) {
+        if (categoryID.length() == 7) {
             return false;
         }
         boolean startWithC = "C".equals(String.valueOf(categoryID.charAt(0)));
-        String is2nd3rdAlphaStr = categoryID.substring(1,3);
+        String is2nd3rdAlphaStr = categoryID.substring(1, 3);
         // use regex to check if char at index 1,2 are alpha
         boolean is2nd3rdAlpha = is2nd3rdAlphaStr.matches("^[A-Z]{2}$");
         boolean isHyphen = "-".equals(String.valueOf(categoryID.charAt(3)));
-        String isFourDigitsStr = categoryID.substring(4,8);
+        String isFourDigitsStr = categoryID.substring(4, 8);
         // use regex to check if the rest are digits
         boolean isFourDigits = isFourDigitsStr.matches("^[0-9]{4}$");
         return startWithC && is2nd3rdAlpha && isHyphen && isFourDigits;
@@ -306,16 +315,13 @@ public class DashboardActivity extends AppCompatActivity {
 
     public boolean onSaveEventClick(View view) {
         // get the list of the categories has been saved previously
-        List<Event> events = Utils.retrievedEventsFromSP(DashboardActivity.this);
-
+//        List<Event> events = Utils.retrievedEventsFromSP(DashboardActivity.this);
         //generate event ID
         String eventID = Utils.generateEventId();
         String eventName = eventNameText.getText().toString();
         String categoryIdRef = categoryIdRefText.getText().toString();
 
         boolean isActive = isActiveSwitch.isChecked();
-
-
         int ticketsAvailable;
         try {
             // check the data type
@@ -336,16 +342,22 @@ public class DashboardActivity extends AppCompatActivity {
             return false;
         }
         // after check all the validity of the event, save the event and update the corresponding category's event count
-        List<EventCategory> eventCategories = Utils.retrievedCategoriesFromSP(DashboardActivity.this);
+//        List<EventCategory> eventCategories = Utils.retrievedCategoriesFromSP(DashboardActivity.this);
+        Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_list_category);
+        if (currentFragment instanceof FragmentListCategory) {
+            eventCategories = ((FragmentListCategory) currentFragment).getCategories();
+        }
         for (int i = 0; i < eventCategories.size(); i++) {
             EventCategory category = eventCategories.get(i);
             if (category.getCategoryID().equals(categoryIdRef)) {
                 category.addEventCount();
-                Utils.storingCategories(eventCategories, DashboardActivity.this);
+                categoryViewModel.deleteAndInsert(category.getId(), category);
+//                Utils.storingCategories(eventCategories, DashboardActivity.this);
                 // save the record of the lastest saved event for the purpose of undoing
                 latestSavedEvent = new Event(eventID, categoryIdRef, eventName, ticketsAvailable, isActive);
-                events.add(latestSavedEvent);
-                Utils.storingEvents(events, DashboardActivity.this);
+//                events.add(latestSavedEvent);
+//                Utils.storingEvents(events, DashboardActivity.this);
+                eventViewModel.insert(latestSavedEvent);
                 eventIDText.setText(eventID);
                 Toast.makeText(this, "Category saved successfully: " + eventID + " to " + categoryIdRef, Toast.LENGTH_LONG).show();
                 return true;
@@ -354,7 +366,6 @@ public class DashboardActivity extends AppCompatActivity {
         toastFillingError("Category does not exist");
         return false;
     }
-
     public void toastFillingError(String strError) {
         Toast.makeText(this, strError, Toast.LENGTH_LONG).show();
     }

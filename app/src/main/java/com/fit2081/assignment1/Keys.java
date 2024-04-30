@@ -8,6 +8,9 @@ public class Keys {
     public static final String ALL_EVENT = "all_event";
     public static final String CATEGORY_SP = "event_category";
     public static final String EVENT_SP = "event_sp";
+    public static final String CATEGORY_DB = "category_db";
+    public static final String CATEGORY_VIEW_MODEL = "category_view_model";
+
 
 
 
