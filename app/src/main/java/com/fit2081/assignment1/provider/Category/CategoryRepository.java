@@ -57,4 +57,8 @@ public class CategoryRepository {
     void increamentByCategoryID(String categoryID) {
         CategoryDatabase.databaseWriteExecutor.execute(() -> categoryDAO.increamentByCategoryID(categoryID));
     }
+
+    void decreamentEventCount(String categoryID) {
+        CategoryDatabase.databaseWriteExecutor.execute(() -> categoryDAO.decreamentEventCount(categoryID));
+    }
 }

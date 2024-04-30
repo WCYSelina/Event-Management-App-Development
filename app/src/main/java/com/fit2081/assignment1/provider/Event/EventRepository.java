@@ -46,4 +46,8 @@ public class EventRepository {
     void deleteAll() {
         EventDatabase.databaseWriteExecutor.execute(() -> eventDAO.deleteAll());
     }
+
+    void deleteByEventID(String eventID) {
+        EventDatabase.databaseWriteExecutor.execute(() -> eventDAO.deleteByEventID(eventID));
+    }
 }

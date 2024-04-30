@@ -24,4 +24,7 @@ public interface EventDAO {
     void addItem(Event item); // Method signature for inserting an Item object into the database.
     @Query("delete from events")
     void deleteAll();
+
+    @Query("DELETE FROM events WHERE eventID = :eventID")
+    void deleteByEventID(String eventID);
 }

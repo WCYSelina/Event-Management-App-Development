@@ -48,4 +48,8 @@ public class EventViewModel extends AndroidViewModel {
     public void deleteAll() {
         repository.deleteAll();
     }
+
+    public void deleteByEventID(String eventID) {
+        repository.deleteByEventID(eventID);
+    }
 }

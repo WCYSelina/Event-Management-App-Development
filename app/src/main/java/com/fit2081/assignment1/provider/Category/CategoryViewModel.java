@@ -62,4 +62,8 @@ public class CategoryViewModel extends AndroidViewModel {
         repository.increamentByCategoryID(categoryID);
     }
 
+    public void decreamentEventCount(String categoryID) {
+        repository.decreamentEventCount(categoryID);
+    }
+
 }

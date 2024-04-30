@@ -35,4 +35,6 @@ public interface CategoryDAO {
         int id = getCategoryIDByID(categoryID);
         increamentEventCount(id);
     }
+    @Query("UPDATE eventCategories SET eventCount = eventCount - 1 WHERE categoryID = :categoryID")
+    void decreamentEventCount(String categoryID);
 }

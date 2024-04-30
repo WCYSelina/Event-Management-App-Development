@@ -53,7 +53,6 @@ public class DashboardActivity extends AppCompatActivity {
     private boolean isActive = false;
     private EventViewModel eventViewModel;
     private CategoryViewModel categoryViewModel;
-    private boolean isCategoryExist = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,16 +106,21 @@ public class DashboardActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                boolean isSaved = onSaveEventClick(view);
-                if (isSaved) {
-                    Snackbar.make(view, "Event Saved", Snackbar.LENGTH_LONG)
-                            .setAction("Undo", new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    undoSavingEvent();
-                                }
-                            }).show();
-                }
+                onSaveEventClick(view, new SaveEventCallback() {
+                    @Override
+                    public void onResult(boolean result) {
+                        if (result) {
+                            Snackbar.make(view, "Event Saved", Snackbar.LENGTH_LONG)
+                                    .setAction("Undo", new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            undoSavingEvent();
+                                        }
+                                    }).show();
+                            // Handle true case
+                        }
+                    }
+                });
             }
         });
     }
@@ -139,22 +143,26 @@ public class DashboardActivity extends AppCompatActivity {
     // undo the last saving event by clicking the undo in the fab button
     // decrement the corresponding category's event count
     public void undoSavingEvent() {
-        List<Event> events = Utils.retrievedEventsFromSP(DashboardActivity.this);
-        List<EventCategory> categories = Utils.retrievedCategoriesFromSP(DashboardActivity.this);
+//        List<Event> events = Utils.retrievedEventsFromSP(DashboardActivity.this);
+//        List<EventCategory> categories = Utils.retrievedCategoriesFromSP(DashboardActivity.this);
         String categoryID = this.latestSavedEvent.getCategoryID();
-        for (int i = 0; i < events.size(); i++) {
-            // find the event that is to be undone
-            if (events.get(i).getEventID().equals(this.latestSavedEvent.getEventID())) {
-                events.remove(i); // only remove the latest one
-            }
-        }
-        for (int i = 0; i < categories.size(); i++) {
-            if (categories.get(i).getCategoryID().equals(categoryID)) {
-                categories.get(i).eventCountDecrement();
-            }
-        }
-        Utils.storingCategories(categories, DashboardActivity.this);
-        Utils.storingEvents(events, DashboardActivity.this);
+
+        eventViewModel.deleteByEventID(this.latestSavedEvent.getEventID());
+        categoryViewModel.decreamentEventCount(categoryID);
+
+//        for (int i = 0; i < events.size(); i++) {
+//            // find the event that is to be undone
+//            if (events.get(i).getEventID().equals(this.latestSavedEvent.getEventID())) {
+//                events.remove(i); // only remove the latest one
+//            }
+//        }
+//        for (int i = 0; i < categories.size(); i++) {
+//            if (categories.get(i).getCategoryID().equals(categoryID)) {
+//                categories.get(i).eventCountDecrement();
+//            }
+//        }
+//        Utils.storingCategories(categories, DashboardActivity.this);
+//        Utils.storingEvents(events, DashboardActivity.this);
     }
 
     class MyNavigationListener implements NavigationView.OnNavigationItemSelectedListener {
@@ -308,7 +316,7 @@ public class DashboardActivity extends AppCompatActivity {
         return startWithC && is2nd3rdAlpha && isHyphen && isFourDigits;
     }
 
-    public boolean onSaveEventClick(View view) {
+    public void onSaveEventClick(View view, SaveEventCallback callback) {
         // get the list of the categories has been saved previously
 //        List<Event> events = Utils.retrievedEventsFromSP(DashboardActivity.this);
         //generate event ID
@@ -317,7 +325,7 @@ public class DashboardActivity extends AppCompatActivity {
         String categoryIdRef = categoryIdRefText.getText().toString();
 
         boolean isActive = isActiveSwitch.isChecked();
-        int ticketsAvailable;
+        int ticketsAvailable = 0;
         try {
             // check the data type
             ticketsAvailable = Integer.parseInt(ticketAvailableText.getText().toString());
@@ -329,32 +337,38 @@ public class DashboardActivity extends AppCompatActivity {
             ticketsAvailable = 0; //default ticket available number
         } catch (Exception e) {
             toastFillingError("Invalid 'Tickets available'");
-            return false;
+            callback.onResult(false);
         }
         // check the event name is valid or not
         if (!eventName.matches("[A-Za-z0-9 ]*[A-Za-z]+[A-Za-z0-9 ]*")) {
             toastFillingError("Invalid event name");
-            return false;
+            callback.onResult(false);
         }
         // after check all the validity of the event, save the event and update the corresponding category's event count
 //        List<EventCategory> eventCategories = Utils.retrievedCategoriesFromSP(DashboardActivity.this);
+        final boolean[] isCategoryExist = new boolean[1];
         int finalTicketsAvailable = ticketsAvailable;
         categoryViewModel.findByCategoryID(categoryIdRef).observe(this, exists -> {
-            if (exists && !isCategoryExist) {
+            if (exists && !isCategoryExist[0]) {
                 categoryViewModel.increamentByCategoryID(categoryIdRef);
                 latestSavedEvent = new Event(eventID, categoryIdRef, eventName, finalTicketsAvailable, isActive);
                 eventViewModel.insert(latestSavedEvent);
                 eventIDText.setText(eventID);
                 Toast.makeText(this, "Category saved successfully: " + eventID + " to " + categoryIdRef, Toast.LENGTH_LONG).show();
-                isCategoryExist = true;
-            } else {
+                isCategoryExist[0] = true;
+                callback.onResult(true);  // Call callback with true
+            } else if(!exists) {
                 toastFillingError("Category does not exist");
-                isCategoryExist = false;
+                isCategoryExist[0] = false;
+                callback.onResult(false);
             }
         });
-        return isCategoryExist;
     }
     public void toastFillingError(String strError) {
         Toast.makeText(this, strError, Toast.LENGTH_LONG).show();
+    }
+
+    public interface SaveEventCallback {
+        void onResult(boolean result);
     }
 }
