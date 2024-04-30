@@ -224,13 +224,8 @@ public class DashboardActivity extends AppCompatActivity {
             categoryViewModel.deleteAll();
         } else if (id == R.id.delete_events) {
             // first delete all the events
-            Utils.storingEvents(new ArrayList<>(), DashboardActivity.this);
+            eventViewModel.deleteAll();
             // then reset the event counts for all the activity
-            List<EventCategory> eventCategories = Utils.retrievedCategoriesFromSP(DashboardActivity.this);
-            for (int i = 0; i < eventCategories.size(); i++) {
-                eventCategories.get(i).resetEventCount();
-            }
-            Utils.storingCategories(eventCategories, DashboardActivity.this);
         }
         // tell the OS
         return true;
@@ -343,7 +338,6 @@ public class DashboardActivity extends AppCompatActivity {
         }
         // after check all the validity of the event, save the event and update the corresponding category's event count
 //        List<EventCategory> eventCategories = Utils.retrievedCategoriesFromSP(DashboardActivity.this);
-
         int finalTicketsAvailable = ticketsAvailable;
         categoryViewModel.findByCategoryID(categoryIdRef).observe(this, exists -> {
             if (exists && !isCategoryExist) {
@@ -355,6 +349,7 @@ public class DashboardActivity extends AppCompatActivity {
                 isCategoryExist = true;
             } else {
                 toastFillingError("Category does not exist");
+                isCategoryExist = false;
             }
         });
         return isCategoryExist;

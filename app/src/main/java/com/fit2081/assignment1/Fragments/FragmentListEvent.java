@@ -51,15 +51,11 @@ public class FragmentListEvent extends Fragment {
     }
 
     private void updateCategoriesList() {
-//        events.clear();
-//        events.addAll(Utils.retrievedEventsFromSP(getContext())); // or however you update your data
-//        adapter.notifyDataSetChanged(); // Notify the adapter to refresh the RecyclerView
         eventViewModel.getAllCategory().observe(getViewLifecycleOwner(), newData -> {
             // cast List<Item> to ArrayList<Item>
             adapter = new EventAdapter(newData);
             recyclerView.setAdapter(adapter);
             adapter.notifyDataSetChanged();
-
         });
     }
 }

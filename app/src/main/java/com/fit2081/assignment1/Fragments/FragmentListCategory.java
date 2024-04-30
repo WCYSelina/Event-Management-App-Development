@@ -20,7 +20,6 @@ import java.util.List;
 public class FragmentListCategory extends Fragment {
     private RecyclerView recyclerView;
     private CategoryAdapter adapter;
-    private List<EventCategory> categories;
     private CategoryViewModel categoryViewModel;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -40,14 +39,9 @@ public class FragmentListCategory extends Fragment {
 
     public void updateCategoriesList() {
         categoryViewModel.getAllCategory().observe(getViewLifecycleOwner(), newData -> {
-            categories = newData;
             adapter = new CategoryAdapter(newData);
             recyclerView.setAdapter(adapter);
             adapter.notifyDataSetChanged();
         });
-    }
-
-    public List<EventCategory> getCategories() {
-        return categories;
     }
 }

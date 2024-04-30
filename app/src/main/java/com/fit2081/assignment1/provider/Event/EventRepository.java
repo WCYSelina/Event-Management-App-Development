@@ -42,4 +42,8 @@ public class EventRepository {
         // Executes the database operation to insert the item in a background thread.
         EventDatabase.databaseWriteExecutor.execute(() -> eventDAO.addItem(event));
     }
+
+    void deleteAll() {
+        EventDatabase.databaseWriteExecutor.execute(() -> eventDAO.deleteAll());
+    }
 }
