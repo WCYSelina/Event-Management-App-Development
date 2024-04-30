@@ -51,7 +51,10 @@ public class CategoryRepository {
         CategoryDatabase.databaseWriteExecutor.execute(() -> categoryDAO.deleteAllCategories());
     }
 
-    void increamentEventCount(int id) {
-        CategoryDatabase.databaseWriteExecutor.execute(() -> categoryDAO.increamentEventCount(id));
+    LiveData<Boolean> findByCategoryId(String categoryID) {
+        return categoryDAO.findByCategoryID(categoryID);
+    }
+    void increamentByCategoryID(String categoryID) {
+        CategoryDatabase.databaseWriteExecutor.execute(() -> categoryDAO.increamentByCategoryID(categoryID));
     }
 }

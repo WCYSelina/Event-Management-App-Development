@@ -9,6 +9,7 @@ public class EventCategory {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
     private int id;
+    @ColumnInfo(name = "categoryID")
     private String categoryID;
     private String categoryName;
     @ColumnInfo(name = "eventCount")

@@ -35,7 +35,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -54,7 +53,7 @@ public class DashboardActivity extends AppCompatActivity {
     private boolean isActive = false;
     private EventViewModel eventViewModel;
     private CategoryViewModel categoryViewModel;
-    private List<EventCategory> eventCategories;
+    private boolean isCategoryExist = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -344,28 +343,21 @@ public class DashboardActivity extends AppCompatActivity {
         }
         // after check all the validity of the event, save the event and update the corresponding category's event count
 //        List<EventCategory> eventCategories = Utils.retrievedCategoriesFromSP(DashboardActivity.this);
-        Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_list_category);
-        if (currentFragment instanceof FragmentListCategory) {
-            eventCategories = ((FragmentListCategory) currentFragment).getCategories();
-        }
-        for (int i = 0; i < eventCategories.size(); i++) {
-            EventCategory category = eventCategories.get(i);
-            if (category.getCategoryID().equals(categoryIdRef)) {
-                category.addEventCount();
-                categoryViewModel.increamentEventCount(category.getId());
-//                Utils.storingCategories(eventCategories, DashboardActivity.this);
-                // save the record of the lastest saved event for the purpose of undoing
-                latestSavedEvent = new Event(eventID, categoryIdRef, eventName, ticketsAvailable, isActive);
-//                events.add(latestSavedEvent);
-//                Utils.storingEvents(events, DashboardActivity.this);
+
+        int finalTicketsAvailable = ticketsAvailable;
+        categoryViewModel.findByCategoryID(categoryIdRef).observe(this, exists -> {
+            if (exists && !isCategoryExist) {
+                categoryViewModel.increamentByCategoryID(categoryIdRef);
+                latestSavedEvent = new Event(eventID, categoryIdRef, eventName, finalTicketsAvailable, isActive);
                 eventViewModel.insert(latestSavedEvent);
                 eventIDText.setText(eventID);
                 Toast.makeText(this, "Category saved successfully: " + eventID + " to " + categoryIdRef, Toast.LENGTH_LONG).show();
-                return true;
+                isCategoryExist = true;
+            } else {
+                toastFillingError("Category does not exist");
             }
-        }
-        toastFillingError("Category does not exist");
-        return false;
+        });
+        return isCategoryExist;
     }
     public void toastFillingError(String strError) {
         Toast.makeText(this, strError, Toast.LENGTH_LONG).show();

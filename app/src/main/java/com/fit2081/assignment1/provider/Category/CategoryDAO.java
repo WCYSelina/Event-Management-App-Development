@@ -25,4 +25,14 @@ public interface CategoryDAO {
     void increamentEventCount(int id);
     @Query("DELETE FROM eventCategories")
     void deleteAllCategories();
+    @Query("SELECT id FROM eventCategories WHERE categoryID = :categoryId")
+    int getCategoryIDByID(String categoryId);
+    @Query("SELECT EXISTS(SELECT 1 FROM eventCategories WHERE categoryID = :categoryId)")
+    LiveData<Boolean> findByCategoryID(String categoryId);
+
+    @Transaction
+    default void increamentByCategoryID(String categoryID) {
+        int id = getCategoryIDByID(categoryID);
+        increamentEventCount(id);
+    }
 }

@@ -53,7 +53,13 @@ public class CategoryViewModel extends AndroidViewModel {
     public void deleteAll() {
         repository.deleteAll();
     }
-    public void increamentEventCount(int id) {
-        repository.increamentEventCount(id);
+
+    public LiveData<Boolean> findByCategoryID(String categoryID) {
+        return repository.findByCategoryId(categoryID);
     }
+
+    public void increamentByCategoryID(String categoryID) {
+        repository.increamentByCategoryID(categoryID);
+    }
+
 }
