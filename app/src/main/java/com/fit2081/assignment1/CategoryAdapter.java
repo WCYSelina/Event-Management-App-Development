@@ -40,10 +40,10 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 
         // Launch new MapsActivity
         holder.itemView.setOnClickListener(v -> {
-            System.out.println(category.getEventLocation());
             Context context = holder.itemView.getContext();
             Intent intent = new Intent(context, GoogleMapActivity.class);
             intent.putExtra("location", category.getEventLocation());
+            intent.putExtra("categoryName", category.getCategoryName());
             context.startActivity(intent);
         });
 
