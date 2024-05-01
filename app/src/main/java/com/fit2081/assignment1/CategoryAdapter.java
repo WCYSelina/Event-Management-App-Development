@@ -1,4 +1,6 @@
 package com.fit2081.assignment1;
+import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -7,6 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.fit2081.assignment1.Activities.GoogleMapActivity;
 import com.fit2081.assignment1.Entities.EventCategory;
 
 import java.util.List;
@@ -35,6 +38,15 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         holder.eventCount.setText(String.valueOf(category.getEventCount()));
         holder.isActive.setText(category.isActive() ? "Active" : "Inactive");
 
+        // Launch new MapsActivity
+        holder.itemView.setOnClickListener(v -> {
+            System.out.println(category.getEventLocation());
+            Context context = holder.itemView.getContext();
+            Intent intent = new Intent(context, GoogleMapActivity.class);
+            intent.putExtra("location", category.getEventLocation());
+            context.startActivity(intent);
+        });
+
     }
 
     @Override
@@ -54,6 +66,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
             categoryName = itemView.findViewById(R.id.displayCategoryName);
             eventCount = itemView.findViewById(R.id.displayEventCount);
             isActive = itemView.findViewById(R.id.displayEventIsActive);
+
         }
     }
 }
