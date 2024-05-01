@@ -1,5 +1,7 @@
 package com.fit2081.assignment1;
 
+import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +10,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.fit2081.assignment1.Activities.EventGoogleResult;
+import com.fit2081.assignment1.Activities.GoogleMapActivity;
 import com.fit2081.assignment1.Entities.Event;
 
 import java.util.List;
@@ -36,6 +40,14 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder>{
         holder.ticketAvailable.setText(String.valueOf(event.getTicketAvailable()));
         holder.isActive.setText(event.isActive() ? "Active" : "Inactive");
 
+        // Launch new MapsActivity
+        holder.itemView.setOnClickListener(v -> {
+            Context context = holder.itemView.getContext();
+            Intent intent = new Intent(context, EventGoogleResult.class);
+//            intent.putExtra("location", category.getEventLocation());
+            intent.putExtra("eventName", event.getEventName());
+            context.startActivity(intent);
+        });
     }
 
     @Override
