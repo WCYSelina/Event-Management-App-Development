@@ -73,7 +73,11 @@ public class GoogleMapActivity extends FragmentActivity implements OnMapReadyCal
              * successCallback method: if results are found, this method will be executed
              *                          runs in a background thread
              */
+            if(location.isEmpty()) {
+                Toast.makeText(this, "Category address not found", Toast.LENGTH_LONG).show();
+            }
             geocoder.getFromLocationName(location, 1, addresses -> {
+                System.out.println(addresses.isEmpty());
                 if(!addresses.isEmpty()) {
                     // run on UI thread as the user interface will update once set map location
                     runOnUiThread(() -> {
@@ -100,7 +104,7 @@ public class GoogleMapActivity extends FragmentActivity implements OnMapReadyCal
                     });
                 } else {
                     runOnUiThread(() -> {
-                        Toast.makeText(GoogleMapActivity.this, "Category address not found", Toast.LENGTH_LONG).show();
+                        Toast.makeText(this, "Category address not found", Toast.LENGTH_LONG).show();
                     });
                 }
             });
