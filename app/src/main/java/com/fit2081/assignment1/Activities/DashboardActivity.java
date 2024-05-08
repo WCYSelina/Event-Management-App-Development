@@ -181,20 +181,6 @@ public class DashboardActivity extends AppCompatActivity {
 
         eventViewModel.deleteByEventID(this.latestSavedEvent.getEventID());
         categoryViewModel.decreamentEventCount(categoryID);
-
-//        for (int i = 0; i < events.size(); i++) {
-//            // find the event that is to be undone
-//            if (events.get(i).getEventID().equals(this.latestSavedEvent.getEventID())) {
-//                events.remove(i); // only remove the latest one
-//            }
-//        }
-//        for (int i = 0; i < categories.size(); i++) {
-//            if (categories.get(i).getCategoryID().equals(categoryID)) {
-//                categories.get(i).eventCountDecrement();
-//            }
-//        }
-//        Utils.storingCategories(categories, DashboardActivity.this);
-//        Utils.storingEvents(events, DashboardActivity.this);
     }
 
     class MyNavigationListener implements NavigationView.OnNavigationItemSelectedListener {
