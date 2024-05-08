@@ -1,8 +1,12 @@
 package com.fit2081.assignment1.Activities;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.view.GestureDetector;
+import android.view.ScaleGestureDetector;
+import androidx.core.view.GestureDetectorCompat;
 import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -11,9 +15,11 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
@@ -53,6 +59,13 @@ public class DashboardActivity extends AppCompatActivity {
     private boolean isActive = false;
     private EventViewModel eventViewModel;
     private CategoryViewModel categoryViewModel;
+    // declare as a class variable
+    TextView tvGesture;
+    // help detect basic gestures like scroll, single tap, double tap, etc
+    private GestureDetectorCompat mDetector;
+
+    // help detect multi touch gesture like pinch-in, pinch-out specifically used for zoom functionality
+    private ScaleGestureDetector mScaleDetector;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,6 +114,25 @@ public class DashboardActivity extends AppCompatActivity {
         // get the current activity's fragment manager and start the transaction
         FragmentListCategory fragment = new FragmentListCategory();
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_list_category, fragment).commit();
+
+
+        // initialise new instance of CustomGestureDetector class
+        CustomGestureDetector customGestureDetector = new CustomGestureDetector();
+
+        // register GestureDetector and set listener as CustomGestureDetector
+        mDetector = new GestureDetectorCompat(this, customGestureDetector);
+        mDetector.setOnDoubleTapListener(customGestureDetector);
+        // initialise in onCreate method
+        tvGesture = findViewById(R.id.gestureType);
+        tvGesture.setText("onDoubleTap");
+        View touchpad = findViewById(R.id.touchpad);
+        touchpad.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                mDetector.onTouchEvent(event);
+                return true;
+            }
+        });
         // fab button, able to undo the the saved event data
         fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -370,5 +402,39 @@ public class DashboardActivity extends AppCompatActivity {
 
     public interface SaveEventCallback {
         void onResult(boolean result);
+    }
+
+    /**
+     * A convenience class to extend when you only want to listen for a subset of all the gestures.
+     */
+
+    class CustomGestureDetector extends GestureDetector.SimpleOnGestureListener{
+        @Override
+        public boolean onSingleTapConfirmed(@NonNull MotionEvent e) {
+            if (tvGesture.getText().toString().equals("onLongPress")) {
+                tvGesture.setText("onDoubleTap");
+            }
+            else{tvGesture.setText("onLongPress");}
+            return super.onSingleTapConfirmed(e);
+        }
+
+        @Override
+        public void onLongPress(@NonNull MotionEvent e) {
+            tvGesture.setText("onLongPress");
+            eventIDText.setText("");
+            eventNameText.setText("");
+            categoryIdRefText.setText("");
+            ticketAvailableText.setText("");
+            isActiveSwitch.setChecked(false);
+            super.onLongPress(e);
+        }
+
+        @Override
+        public boolean onDoubleTap(@NonNull MotionEvent e) {
+            tvGesture.setText("onDoubleTap");
+            fab.callOnClick();
+            return super.onDoubleTap(e);
+        }
+
     }
 }
